@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ 
+<mapper namespace="com.dayuanit.atm.mapper.BankCardMapper">
+
+	<resultMap type="bankCard" id="bankCardMap">
+		<id property="id" column="id"/>
+		<result property="cardNum" column="card_num"/>
+		<result property="balance" column="balance"/>
+		<result property="password" column="password"/>
+		<result property="version" column="version"/>
+		<result property="createTime" column="create_time"/>
+		<result property="modifyTime" column="modify_time"/>
+	</resultMap>
+	
+	<sql id="bankCard_filed">
+		 id,card_num, balance, password, version, create_time, modify_time
+	</sql>
+	
+
+  <select id="getBankCard" resultType="java.util.HashMap">
+    select id,card_num as cardNum, balance, password, version, create_time, modify_time 
+    from atm_back_card 
+    where card_num = #{cardNum}
+  </select>
+  
+  <select id="getBankCard2" resultType="com.dayuanit.atm.domain.BankCard">
+    select id,card_num as cardNum, balance, password, version, create_time as createTime, modify_time as modifyTime
+    from atm_back_card 
+    where card_num = #{cardNum}
+  </select>
+  
+  <select id="getBankCard3" resultType="bankCard">
+    select id,card_num as cardNum, balance, password, version, create_time as createTime, modify_time as modifyTime
+    from atm_back_card 
+    where card_num = #{cardNum}
+  </select>
+  
+  <select id="getBankCard4" resultType="bankCard">
+    select id,card_num as cardNum, balance, password, version, create_time as createTime, modify_time as modifyTime
+    from atm_back_card 
+    where card_num = #{cardNum} and id=#{id}
+  </select>
+  
+  <select id="getBankCard5" resultType="bankCard">
+    select id,card_num as cardNum, balance, password, version, create_time as createTime, modify_time as modifyTime
+    from atm_back_card 
+    where card_num = #{cardNum} and id=#{id}
+  </select>
+  
+  <select id="getBankCard6" resultType="bankCard">
+    select id,card_num as cardNum, balance, password, version, create_time as createTime, modify_time as modifyTime
+    from atm_back_card 
+    where card_num = #{cardNum} and id=#{id}
+  </select>
+  
+  <insert id="addBankCard" useGeneratedKeys="true" keyProperty="id">
+  	INSERT into atm_back_card(card_num, balance, password, version, create_time, modify_time) 
+  	value(#{cardNum}, #{balance}, #{password},#{version}, now(), now())
+  </insert>
+  
+  <select id="getBankCard7" resultType="bankCard">
+  	select id,card_num as cardNum from atm_back_card where card_num = #{cardNum}
+  </select>
+  
+  <select id="getBankCard8" resultMap="bankCardMap">
+  	select <include refid="bankCard_filed"></include>    
+  	from atm_back_card 
+    where card_num = #{cardNum}
+  </select>
+  
+</mapper>

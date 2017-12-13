@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ 
+<mapper namespace="com.dayuanit.atm.mapper.BankCardMapper2">
+
+	<resultMap type="bankCard" id="bankCardMap">
+		<id property="id" column="id"/>
+		<result property="cardNum" column="card_num"/>
+		<result property="balance" column="balance"/>
+		<result property="password" column="password"/>
+		<result property="version" column="version"/>
+		<result property="createTime" column="create_time"/>
+		<result property="modifyTime" column="modify_time"/>
+		<result property="ownerName" column="owner_name"/>
+	</resultMap>
+	
+	<sql id="bankCard_filed">
+		 id,card_num, balance, password, version, create_time, modify_time,owner_name
+	</sql>
+	
+
+  <select id="getBankCard" resultMap="bankCardMap">
+    select <include refid="bankCard_filed"></include>
+    from atm_back_card 
+    where card_num = #{cardNum}
+  </select>
+  
+    <select id="getBankCardList" resultMap="bankCardMap">
+	    select <include refid="bankCard_filed"></include>
+	    from atm_back_card 
+	    where owner_name = #{userName} limit #{startPoint},#{MoveLength}
+  </select>
+  
+   <select id="getBankCardListNum" resultType="int">
+	    select count(*)
+	    from atm_back_card 
+	    where owner_name = #{userName}
+  </select>
+  
+  <insert id="addCard" useGeneratedKeys="true" keyProperty="id">
+  	INSERT into atm_back_card
+  	(card_num, balance, password, version, create_time, modify_time,owner_name) 
+  	value(#{cardNum}, #{balance}, #{password},#{version}, now(), now(),#{ownerName})
+  </insert>
+  
+  <update id="modifyBalance">
+  	UPDATE atm_back_card set balance=#{balance}, version = version + 1, modify_time=now() 
+  	where card_num=#{cardNum} and version=#{version};
+  </update>
+  
+  
+</mapper>

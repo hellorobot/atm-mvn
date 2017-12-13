@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ 
+<mapper namespace="com.dayuanit.atm.mapper.FLowMapper">
+
+	<resultMap type="flow" id="flowMapper">
+		<id property="id" column="id"/>
+		<result property="cardNum" column="card_num"/>
+		<result property="amount" column="amount"/>
+		<result property="flowType" column="flow_type"/>
+		<result property="descript" column="descript"/>
+		<result property="createTime" column="create_time"/>
+	</resultMap>
+
+	<sql id="flow_filed">
+		id, card_num, amount, flow_type, descript, create_time
+	</sql>
+	
+	
+  <insert id="addFlow" useGeneratedKeys="true" keyProperty="id">
+  	INSERT into atm_flow(card_num, amount, flow_type, descript, create_time) 
+  	value(#{cardNum}, #{amount}, #{flowType}, #{descript}, now());
+  </insert>
+  
+  <select id="listFlow" resultMap="flowMapper">
+  	select <include refid="flow_filed"></include> 
+  	from atm_flow 
+  	where card_num = #{cardNum} LIMIT #{currentPage},#{eachPageFlowsNum};
+  </select>
+  
+    <select id="countFlow" resultType="int">
+  	select count(card_num)
+  	from atm_flow 
+  	where card_num = #{cardNum};
+  </select>
+  
+</mapper>
