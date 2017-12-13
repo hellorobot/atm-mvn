@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.dayuanit.atm.db.DataBase;
 import com.dayuanit.atm.domain.BankCard;
@@ -26,6 +27,7 @@ public class AtmServiceImpl implements AtmService {
 	private FLowMapper flowMapper;
 	
 	@Override
+	@Transactional(rollbackFor=Exception.class)
 	public BankCard openAccount(String password,String ownerName) {
 		BankCard bankCard = new BankCard();
 		bankCard.setBalance("0.00");
@@ -58,6 +60,7 @@ public class AtmServiceImpl implements AtmService {
 	}
 
 	@Override
+	@Transactional(rollbackFor=Exception.class)
 	public void deposit(String amount, String cardNum, String password) {
 					
 			BankCard bankCard = bcm.getBankCard(cardNum);
@@ -84,7 +87,7 @@ public class AtmServiceImpl implements AtmService {
 			flow.setCardNum(cardNum);
 			flow.setDescript("存款");
 			flow.setFlowType(1);
-			
+
 			rows = flowMapper.addFlow(flow);
 			if (1 != rows) {
 				throw new BizException("flow erro");
@@ -92,6 +95,7 @@ public class AtmServiceImpl implements AtmService {
 		} 
 
 	@Override
+	@Transactional(rollbackFor=Exception.class)
 	public void draw(String amount, String cardNum, String password) {
 		
 			BankCard bankCard = bcm.getBankCard(cardNum);
@@ -131,6 +135,7 @@ public class AtmServiceImpl implements AtmService {
 		}
 	
 	@Override
+	@Transactional(rollbackFor=Exception.class)
 	public void transfer(String amount, String inCardNum, String outCardNum, String password) {
 			BankCard outCard = bcm.getBankCard(outCardNum);
 			
