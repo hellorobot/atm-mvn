@@ -1,40 +1,36 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%> 
-<%@ taglib prefix="c" 
-           uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 
 <head>
-	<meta http-equiv="content-type" content="text/html;charset=utf-8">
-	<title>ATM系统</title>
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<title>ATM系统</title>
 
 </head>
 
 <body bgcolor="#DC8349  ">
-<div align="center">
-<h1>用戶中心</h1>
-<img src="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=827394077,4082791614&fm=27&gp=0.jpg" />
+	<div align="center">
+		<h1>用戶中心</h1>
+		<img
+			src="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=827394077,4082791614&fm=27&gp=0.jpg" />
 
 		<br>
 
-	<h1>用户名：${user.username }</h1>
-	<a href="http://127.0.0.1:8080" >》》》注銷》》》</a>
-	<br/>	
-		<img src="/user/openImg.do" width="200" height="200">
-	<br/>	
-	<a href="/bankCard/toOpenaccount.do">開戶</a>
-	<a href="/user/upLoadIMG.do">上传照片</a>
+		<h1>用户名：${user.username }</h1>
+		<a href="http://127.0.0.1:8080">》》》注銷》》》</a> <br /> <img
+			src="/user/openImg.do" width="200" height="200"> <br /> <a
+			href="/bankCard/toOpenaccount.do">開戶</a> <a href="/user/upLoadIMG.do">上传照片</a>
 
-		<br/>
-	---------------------------------	
+		<br /> ---------------------------------
 		<table id="cardTable"></table>
 		<span id="current"></span>
-				<button onclick="goFirst();">首页</button>
-				<button onclick="ahead();">前一頁</button>
-				<button onclick="next();">后一頁</button>
-				<button onclick="goLast();">末頁</button>
+		<button onclick="goFirst();">首页</button>
+		<button onclick="ahead();">前一頁</button>
+		<button onclick="next();">后一頁</button>
+		<button onclick="goLast();">末頁</button>
 
-</div>
+	</div>
 
 </body>
 <script type="text/javascript" src="/js/jquery-3.2.1.js"></script>
@@ -86,7 +82,9 @@ function flow(cardNum) {
 
 
 function callback(data,status){	
-	var AjaxDto = JSON.parse(data);
+	
+	var AjaxDto = data;
+	
 	if(AjaxDto.flag){
 		total = AjaxDto.data.pagesNum;
 		var result = AjaxDto.data.obj;

@@ -14,6 +14,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSON;
 import com.dayuanit.atm.domain.BankCard;
@@ -26,12 +28,14 @@ import com.dayuanit.atm.service.impl.UserServiceimpl;
 
 import top.robotman.atm.ajaxDTO.AjaxDTO;
 import top.robotman.atm.flipPages.FlipPage;
-
+@Controller
+@RequestMapping("/user")
 public abstract class BaseController {
 	
+	@RequestMapping("/toUserCenter")
 	public String toUserCenter(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		return "/WEB-INF/pages/" + "userCenter" + ".jsp";
+		return  "userCenter" ;
 	}
 
 

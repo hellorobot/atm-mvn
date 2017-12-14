@@ -33,7 +33,7 @@
 
 	
 	function ajaxFunction(data,status){
-		var ajaxDto =  eval('(' + data +')')
+		var ajaxDto =  data;
 		
 		if(ajaxDto.flag){
 			alert("login success!");

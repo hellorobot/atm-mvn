@@ -15,6 +15,9 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.dayuanit.atm.domain.User;
@@ -28,20 +31,20 @@ import top.robotman.atm.ajaxDTO.AjaxDTO;
 import top.robotman.atm.annotation.Autowired;
 import top.robotman.atm.annotation.MyAnnotation;
 import top.robotman.atm.flipPages.FlipPage;
-
+@Controller
+@RequestMapping("/user")
 public class UserController extends BaseController {
-
+	
+	@org.springframework.beans.factory.annotation.Autowired
 	private UserService userService;
-	
 
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
-	
+	@RequestMapping("/toLogin")
 	public String toLogin(HttpServletRequest req, HttpServletResponse resp) {
-		return "/WEB-INF/pages/login.jsp";
+		return "login";
 	}
-
+	
+	@RequestMapping("/login")
+	@ResponseBody
 	public AjaxDTO login(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		AjaxDTO dto = new AjaxDTO();
 
@@ -66,11 +69,14 @@ public class UserController extends BaseController {
 			return dto;
 		}
 	}
-
+	
+	@RequestMapping("/toRegist")
 	public String toRegist(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		return "/WEB-INF/pages/regist.jsp";
+		return "regist";
 	}
-
+	
+	@RequestMapping("/regist")
+	@ResponseBody
 	public AjaxDTO regist(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String userName = req.getParameter("userName");
 		String password = req.getParameter("password");
@@ -98,11 +104,13 @@ public class UserController extends BaseController {
 			return dataTransfer;
 		}
 	}
-
+	
+	@RequestMapping("/upLoadIMG")
 	public String upLoadIMG(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		return "/WEB-INF/pages/upLoadIMG.jsp";
+		return "upLoadIMG";
 	}
-
+	
+	@RequestMapping("upLoad")
 	public void upLoad(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String savePath = req.getServletContext().getRealPath("/upload");
 		File saveDir = new File(savePath);
@@ -151,11 +159,11 @@ public class UserController extends BaseController {
 			e.printStackTrace();
 		}
 	}
-
+	@RequestMapping("/openImg")
 	public void openImg(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		String savePath = req.getServletContext().getRealPath("/");
-		File imgFile = new File(savePath + "WEB-INF/upload/下载.jpg");
+		File imgFile = new File(savePath + "/WEB-INF/upload/下载.jpg");
 
 		FileInputStream fis = new FileInputStream(imgFile);
 		OutputStream os = resp.getOutputStream();
@@ -169,7 +177,9 @@ public class UserController extends BaseController {
 		fis.close();
 		os.close();
 	}
-
+	
+	@RequestMapping("/loadBankcard")
+	@ResponseBody
 	public AjaxDTO loadBankcard(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		String currentPage = req.getParameter("currentPage");
@@ -188,8 +198,7 @@ public class UserController extends BaseController {
 			
 			return dto;
 		} catch (BizException e) {
-			dto.setFlag(false);
-			
+			dto.setFlag(false);			
 			return dto;
 		}
 	}

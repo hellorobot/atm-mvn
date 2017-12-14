@@ -51,7 +51,7 @@ public class AtmServlet extends HttpServlet {
 //			e.printStackTrace();
 //			throw new ServletException(e.getMessage());
 //		} 		
-		SpringControllerHandler.init();
+		//SpringControllerHandler.init();
 	}
 
 	@Override

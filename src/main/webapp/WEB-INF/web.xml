@@ -14,13 +14,41 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
 		 http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	version="3.1">
+	
+	 <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:springXML/springController.xml</param-value>
+    </context-param>
 
 	<listener>
 		<listener-class>top.robotman.atm.listener.MyLintener</listener-class>
 	</listener>
-
+	
+	<listener>
+   		<listener-class>
+     		 org.springframework.web.context.ContextLoaderListener
+   		</listener-class>
+	</listener>
+	
 	<servlet>
-
+      <servlet-name>springMVC</servlet-name>
+      	<servlet-class>
+         	org.springframework.web.servlet.DispatcherServlet
+      	</servlet-class>
+      	
+      	<init-param>
+        	<param-name>contextConfigLocation</param-name>
+            <param-value>classpath:springXML/springMVC.xml</param-value>
+    	</init-param>
+      <load-on-startup>1</load-on-startup>
+    </servlet>
+   
+   <servlet-mapping>
+      <servlet-name>springMVC</servlet-name>
+      <url-pattern>*.do</url-pattern>
+   </servlet-mapping>
+<!--  
+	<servlet>
 		<servlet-name>test001</servlet-name>
 		<servlet-class>top.robotman.atm.servlet.AtmServlet</servlet-class>
 		<init-param>
@@ -30,12 +58,11 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
-
 	<servlet-mapping>
 		<servlet-name>test001</servlet-name>
 		<url-pattern>*.do</url-pattern>
 	</servlet-mapping>
-
+-->
 	<session-config>
 		<session-timeout>60</session-timeout>
 	</session-config>

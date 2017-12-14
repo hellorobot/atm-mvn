@@ -2,6 +2,7 @@ package top.robotman.atm.controller;
 
 
 import java.io.BufferedWriter;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -16,6 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.dayuanit.atm.domain.BankCard;
 import com.dayuanit.atm.domain.Flow;
 import com.dayuanit.atm.domain.User;
@@ -24,27 +29,23 @@ import com.dayuanit.atm.service.UserService;
 import com.dayuanit.atm.service.impl.AtmServiceImpl;
 import com.dayuanit.atm.service.impl.UserServiceimpl;
 
-import top.robotman.atm.annotation.Autowired;
+
 import top.robotman.atm.annotation.MyAnnotation;
 import top.robotman.atm.flipPages.FlipPage;
-
+@Controller
+@RequestMapping("/bankCard")
 public class BankCardController extends BaseController {
-
+	
+	@Autowired
 	private AtmService seivice;
+	@Autowired
 	private UserService userService;
 
-	public void setAtmService(AtmService seivice) {
-		this.seivice = seivice;
-	}
-
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
-
+	@RequestMapping("/toOpenaccount")
 	public void toOpenaccount(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.getRequestDispatcher("/WEB-INF/pages/toOpenaccount.html").forward(req, resp);
 	}
-
+	@RequestMapping("/openAccount")
 	public String openAccount(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String password = req.getParameter("password");
 		HttpSession htsession = req.getSession();
@@ -53,16 +54,18 @@ public class BankCardController extends BaseController {
 		BankCard bc = seivice.openAccount(password, owner);
 		req.setAttribute("bc", bc);
 
-		return "/WEB-INF/pages/openAccount.jsp";
+		return "openAccount";
 	}
-
+	
+	@RequestMapping("/toSave")
 	public String toSave(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String cardNum = req.getParameter("cardNum");
 
 		req.setAttribute("cardNum", cardNum);
-		return "/WEB-INF/pages/toSave.jsp";
+		return "toSave";
 	}
-
+	
+	@RequestMapping("/saveMoney")
 	public String saveMoney(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String amount = req.getParameter("amount");
 		String cardNum = req.getParameter("cardNum");
@@ -72,9 +75,10 @@ public class BankCardController extends BaseController {
 
 		BankCard bc = seivice.getBankCard(cardNum);
 		req.setAttribute("bc", bc);
-		return "/WEB-INF/pages/openAccount.jsp";
+		return "openAccount";
 	}
-
+	
+	@RequestMapping("/transfer")
 	public String transfer(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String amount = req.getParameter("amount");
 		String cardNumOut = req.getParameter("cardNumOut");
@@ -85,16 +89,18 @@ public class BankCardController extends BaseController {
 
 		BankCard bc = seivice.getBankCard(cardNumOut);
 		req.setAttribute("bc", bc);
-		return "/WEB-INF/pages/openAccount.jsp";
+		return "openAccount";
 	}
-
+	
+	@RequestMapping("/toFlow")
 	public String toFlow(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String cardNum = req.getParameter("cardNum");
 
 		req.setAttribute("cardNum", cardNum);
-		return "/WEB-INF/pages/flow.jsp";
+		return "flow";
 	}
-
+	
+	@RequestMapping("/qureyFlow")
 	public String qureyFlow(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		String cardNum = req.getParameter("cardNum");
@@ -106,9 +112,10 @@ public class BankCardController extends BaseController {
 		req.setAttribute("cardNum", cardNum);
 		req.setAttribute("password", password);
 		req.setAttribute("flipPage", flipPage);
-		return "/WEB-INF/pages/flow.jsp";
+		return "flow";
 	}
-
+	
+	@RequestMapping("/downFlow")
 	public void downFlow(HttpServletRequest req, HttpServletResponse resp) throws UnsupportedEncodingException {
 		String cardNum = req.getParameter("cardNum");
 		String password = req.getParameter("password");
