@@ -13,16 +13,18 @@
 	<div align="center">
 		<h1>用戶中心</h1>
 		<img
-			src="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=827394077,4082791614&fm=27&gp=0.jpg" />
-
+		src="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=827394077,4082791614&fm=27&gp=0.jpg" width="300"  />
 		<br>
-
 		<h1>用户名：${user.username }</h1>
-		<a href="http://127.0.0.1:8080">》》》注銷》》》</a> <br /> <img
-			src="/user/openImg.do" width="200" height="200"> <br /> <a
-			href="/bankCard/toOpenaccount.do">開戶</a> <a href="/user/upLoadIMG.do">上传照片</a>
-
+		<a href="http://127.0.0.1:8080">》》》注銷》》》</a> <br/> 
+		
+		<imgsrc="/user/openImg.do" width="200" height="200"> <br/> 
+		
+		<a href="/bankCard/toOpenaccount.do">開戶</a> 
+		<a href="/user/upLoadIMG.do">上传照片</a>
+		<a href="/user/tochangePSW.do">修改密码</a>
 		<br /> ---------------------------------
+		
 		<table id="cardTable"></table>
 		<span id="current"></span>
 		<button onclick="goFirst();">首页</button>

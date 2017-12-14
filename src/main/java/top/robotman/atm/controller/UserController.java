@@ -202,4 +202,43 @@ public class UserController extends BaseController {
 			return dto;
 		}
 	}
+	
+	@RequestMapping("/tochangePSW")
+	public String tochangePSW(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		return "changePSW";
+	}
+	
+	@RequestMapping("/changePSW")
+	@ResponseBody
+	public AjaxDTO changePSW(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		AjaxDTO dto = new AjaxDTO();
+		
+		HttpSession httpSession = req.getSession();
+		
+		User user = (User)httpSession.getAttribute("user");
+		
+		String username = user.getUsername();
+		String password = user.getPassword();
+		
+		String tmpPSW = req.getParameter("tmpPSW");
+		String changePSW01 = req.getParameter("changePSW01");
+		String changePSW02 = req.getParameter("changePSW02");
+		
+		String tmpPSWmd5 =  DigestUtils.md5Hex(tmpPSW+username);
+		String changePSW01md5 = DigestUtils.md5Hex(changePSW01+username);
+		
+		if(!password.equals(tmpPSWmd5)) {
+			dto.setFlag(false);
+			dto.setMessage("原始密码错误");
+			return dto;
+		}
+		//执行修改密码的步骤
+		System.out.println(tmpPSWmd5);
+		userService.changePSW(username, changePSW01md5);
+		//。。。。。。todo
+		
+		dto.setFlag(true);
+		dto.setMessage("修改成功");	
+		return dto;
+	}
 }

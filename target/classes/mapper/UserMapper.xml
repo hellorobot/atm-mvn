@@ -31,6 +31,12 @@
   	VALUEs (#{username},#{password},'F','zz');
   	
   </insert>
+  
+  <update id="changePSW">
+  	update user set 
+  	PASSWORD = #{password} 
+  	WHERE user_name = #{username};
+  </update>
 
 	
 <!--  	

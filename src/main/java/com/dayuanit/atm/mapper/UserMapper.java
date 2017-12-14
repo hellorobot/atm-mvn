@@ -9,5 +9,7 @@ public interface UserMapper {
 	User selecetUser(String username);
 	
 	int registUser(@Param("username")String username,@Param("password")String password);
+	
+	int changePSW(@Param("username")String username,@Param("password")String password);
 
 }

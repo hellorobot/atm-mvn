@@ -13,4 +13,6 @@ public interface UserService {
 	int regist(String username, String password);
 	
 	User getUser(String username);
+	
+	int changePSW(String username, String password);
 }
