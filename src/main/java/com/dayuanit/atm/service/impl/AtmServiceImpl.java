@@ -2,6 +2,7 @@ package com.dayuanit.atm.service.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,7 +65,7 @@ public class AtmServiceImpl implements AtmService {
 	public void deposit(String amount, String cardNum, String password) {
 					
 			BankCard bankCard = bcm.getBankCard(cardNum);
-			if (null == bankCard) {
+			if (StringUtils.isBlank(cardNum)) {
 				throw new BizException("卡号不能为空");
 			}
 			
@@ -99,7 +100,7 @@ public class AtmServiceImpl implements AtmService {
 	public void draw(String amount, String cardNum, String password) {
 		
 			BankCard bankCard = bcm.getBankCard(cardNum);
-			if (null == bankCard) {
+			if (StringUtils.isBlank(cardNum)) {
 				throw new BizException("drawxxxx");
 			}
 			
@@ -140,11 +141,11 @@ public class AtmServiceImpl implements AtmService {
 			BankCard outCard = bcm.getBankCard(outCardNum);
 			
 			if (null == outCard) {
-				throw new BizException("锟斤拷锟叫匡拷锟脚诧拷锟斤拷锟节伙拷锟斤拷锟诫不锟斤拷确");
+				throw new BizException("转出的卡不存在");
 			}
 			
 			if (!outCard.getPassword().equals(password)) {
-				throw new BizException("锟斤拷锟叫匡拷锟脚诧拷锟斤拷锟节伙拷锟斤拷锟诫不锟斤拷确");
+				throw new BizException("密码错误");
 			}
 			
 			amount = CardUtils.checkAmountAndFormat(amount);
@@ -153,30 +154,30 @@ public class AtmServiceImpl implements AtmService {
 			String newBalance = MoneyUtil.sub(outCard.getBalance(), amount);
 			
 			if (Double.parseDouble(newBalance) < 0) {
-				throw new BizException("锟斤拷畈伙拷悖拷薹锟阶拷锟�");
+				throw new BizException("余额不足");
 			}
 			
 			outCard.setBalance(newBalance);
 			int rows = bcm.modifyBalance(outCard.getCardNum(), outCard.getBalance(), outCard.getVersion());
 			if (1 != rows) {
-				throw new BizException("转锟斤拷失锟斤拷");
+				throw new BizException("转账故障");
 			}
 			
 			Flow flow = new Flow();
 			flow.setAmount(amount);
 			flow.setCardNum(outCardNum);
-			flow.setDescript("杞处");
+			flow.setDescript("转账");
 			flow.setFlowType(3);
 			
 			rows = flowMapper.addFlow(flow);
 			if (1 != rows) {
-				throw new BizException("锟斤拷锟斤拷锟剿э拷锟�");
+				throw new BizException("流水写入失败");
 			}
 			
-			//转锟斤拷锟剿伙拷锟斤拷锟斤拷
+
 			BankCard inCard = bcm.getBankCard(inCardNum);
 			if (null == inCard) {
-				throw new BizException("锟斤拷锟叫匡拷锟脚诧拷锟斤拷锟斤拷");
+				throw new BizException("转入卡号不存在");
 			}
 			
 			String inBalance =  MoneyUtil.plus(inCard.getBalance(), amount);
@@ -184,18 +185,18 @@ public class AtmServiceImpl implements AtmService {
 			inCard.setBalance(inBalance);
 			rows = bcm.modifyBalance(inCard.getCardNum(), inCard.getBalance(), inCard.getVersion());
 			if (1 != rows) {
-				throw new BizException("转锟斤拷失锟斤拷");
+				throw new BizException("转入失败1");
 			}
 			
 			flow = new Flow();
 			flow.setAmount(amount);
 			flow.setCardNum(inCardNum);
-			flow.setDescript("鏀惰处");
+			flow.setDescript("转账");
 			flow.setFlowType(4);
 			
 			rows = flowMapper.addFlow(flow);
 			if (1 != rows) {
-				throw new BizException("鏀惰处澶辫触");
+				throw new BizException("转账失败");
 			}
 	}
 	
@@ -204,8 +205,8 @@ public class AtmServiceImpl implements AtmService {
 		FlipPage filpPage = new FlipPage();
 
 		BankCard bankCard = bcm.getBankCard(cardNum);
-		if (null == bankCard) {
-			throw new BizException("queryFlow Exception1");
+		if (StringUtils.isBlank(cardNum)) {
+			throw new BizException("卡号不能为空");
 		}
 
 		if (!bankCard.getPassword().equals(password)) {
@@ -222,7 +223,6 @@ public class AtmServiceImpl implements AtmService {
 		
 		filpPage.setObj(list1);
 		return filpPage;
-
 	}
 	
 	@Override

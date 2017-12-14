@@ -2,6 +2,7 @@ package com.dayuanit.atm.service.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
@@ -15,6 +16,7 @@ import com.dayuanit.atm.mapper.BankCardMapper;
 import com.dayuanit.atm.mapper.BankCardMapper2;
 import com.dayuanit.atm.mapper.UserMapper;
 import com.dayuanit.atm.service.UserService;
+
 
 import top.robotman.atm.annotation.Component;
 import top.robotman.atm.flipPages.FlipPage;
@@ -32,8 +34,8 @@ public class UserServiceimpl implements UserService {
 	}
 
 	public int regist(String username, String password) throws BizException {
-
-		if (username == null || "".equals(username)) {
+		
+		if (StringUtils.isBlank(username)) {
 			throw new BizException("用户名不能为空");
 		}
 
@@ -43,7 +45,11 @@ public class UserServiceimpl implements UserService {
 
 	@Override
 	public User login(String username, String password) throws BizException {
-
+		
+		if (StringUtils.isBlank(username)) {
+			throw new BizException("用户名不能为空");
+		}
+		
 		User user = usermp.selecetUser(username);
 		System.out.println(user);
 		if (user == null) {
