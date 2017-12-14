@@ -3,11 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 
-<head>
-<meta http-equiv="content-type" content="text/html;charset=utf-8">
-<title>ATM系统</title>
-
-</head>
+<jsp:include page="webHEAD.jsp"></jsp:include>
 
 <body>
 	<div align="center">
@@ -18,8 +14,8 @@
 		<input type="hidden"  value="${user.password}" id = "realpassword">
 		<input type="hidden"  value="${user.username}" id = "username">
 		当前密码 : <input type="text"  id="tmpPSW" name="tmpPSW"><br/>
-		修改密码 : <input type="text" id="changePSW01"><br/>
-		重复密码 : <input type="text" id="changePSW02"><br />
+		修改密码 : <input type="password" id="changePSW01"><br/>
+		重复密码 : <input type="password" id="changePSW02"><br />
 		</form>
 		<button onclick="changePSW();">修改</button>
 		<button onclick="forgetPSW();">忘记密码</button>
@@ -54,6 +50,11 @@ function changePSW() {
 		return;
 	}
 	
+	if(changePSW01 == null){
+		alert("密碼不能爲空");
+		return;
+	}
+	
 	var changeform = {				
 			tmpPSW : $('#tmpPSW').val(),
 			changePSW01 : $('#changePSW01').val(),
@@ -77,11 +78,11 @@ function callback(data,status) {
 }
 
 function forgetPSW() {
-	
+	alert("你忘记了我能怎么办");
 }
 
 
 
 </script>
-
+<jsp:include page="webFOOT.jsp"></jsp:include>
 </html>

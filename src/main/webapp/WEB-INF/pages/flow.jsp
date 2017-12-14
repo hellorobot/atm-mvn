@@ -4,11 +4,7 @@
            uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 
-<head>
-	<meta http-equiv="content-type" content="text/html;charset=utf-8">
-	<title>ATM系统</title>
-
-</head>
+<jsp:include page="webHEAD.jsp"></jsp:include>
 
 <body bgcolor="#DC8349  ">
 <div align="center">
@@ -114,5 +110,5 @@ function downflow() {
 
 </script>
 
-
+<jsp:include page="webFOOT.jsp"></jsp:include>
 </html>

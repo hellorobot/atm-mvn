@@ -25,5 +25,5 @@
 
 </body>
 
-
+<jsp:include page="webFOOT.jsp"></jsp:include>
 </html>

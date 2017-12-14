@@ -64,5 +64,5 @@ function ajaxfun(data,status){
 
 </script>
 
-
+<jsp:include page="webFOOT.jsp"></jsp:include>
 </html>
