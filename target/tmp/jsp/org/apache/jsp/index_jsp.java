@@ -6,13 +6,13 @@
  *       the last modified time of the source file after
  *       generation to assist with modification tracking.
  */
-package org.apache.jsp.WEB_002dINF.pages;
+package org.apache.jsp;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 
-public final class webFOOT_jsp extends org.apache.jasper.runtime.HttpJspBase
+public final class index_jsp extends org.apache.jasper.runtime.HttpJspBase
     implements org.apache.jasper.runtime.JspSourceDependent,
                  org.apache.jasper.runtime.JspSourceImports {
 
@@ -20,6 +20,13 @@ public final class webFOOT_jsp extends org.apache.jasper.runtime.HttpJspBase
           javax.servlet.jsp.JspFactory.getDefaultFactory();
 
   private static java.util.Map<java.lang.String,java.lang.Long> _jspx_dependants;
+
+  static {
+    _jspx_dependants = new java.util.HashMap<java.lang.String,java.lang.Long>(3);
+    _jspx_dependants.put("file:/C:/Users/laozhao/.m2/repository/org/apache/taglibs/taglibs-standard-impl/1.2.5/taglibs-standard-impl-1.2.5.jar", Long.valueOf(1513225472285L));
+    _jspx_dependants.put("jar:file:/C:/Users/laozhao/.m2/repository/org/apache/taglibs/taglibs-standard-impl/1.2.5/taglibs-standard-impl-1.2.5.jar!/META-INF/fmt.tld", Long.valueOf(1425949870000L));
+    _jspx_dependants.put("jar:file:/C:/Users/laozhao/.m2/repository/org/apache/taglibs/taglibs-standard-impl/1.2.5/taglibs-standard-impl-1.2.5.jar!/META-INF/c.tld", Long.valueOf(1425949870000L));
+  }
 
   private static final java.util.Set<java.lang.String> _jspx_imports_packages;
 
@@ -107,12 +114,42 @@ return;
       _jspx_out = out;
 
       out.write("\r\n");
+      out.write(" \r\n");
       out.write("\r\n");
-      out.write("<footer>\r\n");
-      out.write("\t<br /> <br /> <br /> <br /> <br /> <br />\r\n");
-      out.write("\t\t<br /> <br /> <br /> <br /> <br /> <br />\r\n");
-      out.write("\t<div align=\"center\">====================[© 1995-2020 ZQ.COM 版权所有]====================</div>\r\n");
-      out.write("</footer>");
+      out.write("<html>\r\n");
+      out.write("\r\n");
+      out.write("<head>\r\n");
+      out.write("\t<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\">\r\n");
+      out.write("\t<title>ATM系统</title>\r\n");
+      out.write("\r\n");
+      out.write("</head>\r\n");
+      out.write("\r\n");
+      out.write("<body bgcolor=\"#DC8349  \">\r\n");
+      out.write("<div align=\"center\">\r\n");
+      out.write("<h1>登陆</h1>\r\n");
+      out.write("<img src=\"https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=827394077,4082791614&fm=27&gp=0.jpg\" />\r\n");
+      out.write("\r\n");
+      out.write("\t\t\r\n");
+      out.write("\t\r\n");
+      out.write("\t\t\t\r\n");
+      out.write("\t\t\t");
+ 
+				request.getRequestDispatcher("WEB-INF/pages/login.jsp").forward(request, response);
+			
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("</div>\r\n");
+      out.write("\r\n");
+      out.write("</body>\r\n");
+      out.write("\r\n");
+      out.write("<script type=\"text/javascript\">\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("</script>\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("</html>");
     } catch (java.lang.Throwable t) {
       if (!(t instanceof javax.servlet.jsp.SkipPageException)){
         out = _jspx_out;

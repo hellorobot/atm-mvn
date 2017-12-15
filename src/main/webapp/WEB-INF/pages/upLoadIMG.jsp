@@ -20,13 +20,13 @@
 		</font>
 		
 		<form enctype="multipart/form-data" method="post"
-			action="/user/upload.do">
+			action="/user/upLoad2.do">
 			
 			文件描述：<input type="text" name="text" /><br /> 
 			
 			选择文件：<input type="file"name="file1" /><br /> 
 			
-			选择文件：<input type="file" name="file2" /><br />
+		<!--  	选择文件：<input type="file" name="file2" /><br />-->
 			
 			<input type="submit" value="上传" />
 			

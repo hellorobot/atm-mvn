@@ -15,9 +15,11 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
 import com.dayuanit.atm.domain.User;
@@ -110,8 +112,20 @@ public class UserController extends BaseController {
 	public String upLoadIMG(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		return "upLoadIMG";
 	}
+	@RequestMapping("/upLoad2")
+	public void upLoad(MultipartFile file1,HttpServletRequest req,HttpSession session) {
+		System.out.println(">>>>>>[][][][]"+file1.getName());
+		String rp = req.getServletContext().getRealPath("/");
+        File uploadedFile = new File(rp + "/WEB-INF/upload/" + "1.jpg");
+        
+		try {
+			file1.transferTo(uploadedFile);
+		} catch (IllegalStateException | IOException e) {
+			e.printStackTrace();
+		}
+	}
 
-	@RequestMapping("upLoad")
+	@RequestMapping("/upLoad")
 	public void upLoad(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String savePath = req.getServletContext().getRealPath("/upload");
 		File saveDir = new File(savePath);
