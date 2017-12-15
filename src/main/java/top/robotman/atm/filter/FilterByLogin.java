@@ -55,6 +55,7 @@ public class FilterByLogin implements Filter {
 		}else {
 			//否则校验session里是否有user，没有就要求跳转到首页登陆
 			checkUserSession(req, resp,chain);
+			return;
 		}
 	}
 	
@@ -70,6 +71,7 @@ public class FilterByLogin implements Filter {
 			//就是ajax请求的请求头中有X-Requested-With:XMLHttpRequest这个标签，而普通的跳转请求是没有的
 			//为了清楚起见，再写个区分方法好了，具体功能在区分方法里实施。
 			checkAjaxOrString(req, resp,chain);
+			return;
 		}
 	}
 	
@@ -87,8 +89,6 @@ public class FilterByLogin implements Filter {
 //			os.write(JSON.toJSONString(dto).getBytes("UTF-8"));
 //			os.flush();
 			//os.close();
-			
-			resp.sendRedirect("/user/toLogin.do");
 			//req.getRequestDispatcher("/user/toLogin.do").forward(req, resp);
 			return;
 		}else {
@@ -103,6 +103,7 @@ public class FilterByLogin implements Filter {
 				os.flush();
 				System.out.println(JSON.toJSONString(dto));
 				System.out.println("ajax请求111，sx");
+				return;
 			}			
 		}
 	}

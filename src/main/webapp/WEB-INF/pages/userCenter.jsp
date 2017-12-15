@@ -8,7 +8,7 @@
 <body bgcolor="#DC8349  ">
 	<div align="center">
 		<h1>用戶中心</h1>
-		<h3>用户名：${user.username }</h3>
+		<h3 style = " color : blue; ">用户名：${user.username }</h3>
 		<a href="http://127.0.0.1:8080">》》》注銷》》》</a> <br/> 
 		
 		<img src="/user/openImg.do" width="150" height="150"> <br/> 

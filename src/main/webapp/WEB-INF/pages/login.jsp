@@ -9,8 +9,6 @@
 <body bgcolor="#DC8349  ">
 <div align="center">
 <h1>登陆</h1>
-<img src="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=827394077,4082791614&fm=27&gp=0.jpg" />
-
 		<br>
 		<form id="flowForm" method="post">
 		账号：<input type="text" id="userName">

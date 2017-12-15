@@ -72,8 +72,7 @@ function callback(data,status) {
 	}
 	
 	alert(AjaxDto.message);
-	
-	window.location.href='/user/toUserCenter.do';
+	window.location.href='/user/toLogin.do';
 	return;
 }
 

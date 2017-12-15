@@ -28,8 +28,8 @@ import com.dayuanit.atm.service.impl.UserServiceimpl;
 
 import top.robotman.atm.ajaxDTO.AjaxDTO;
 import top.robotman.atm.flipPages.FlipPage;
-@Controller
-@RequestMapping("/user")
+//@Controller
+//@RequestMapping("/user")
 public abstract class BaseController {
 	
 	@RequestMapping("/toUserCenter")

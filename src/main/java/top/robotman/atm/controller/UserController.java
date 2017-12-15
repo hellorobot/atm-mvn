@@ -31,10 +31,11 @@ import top.robotman.atm.ajaxDTO.AjaxDTO;
 import top.robotman.atm.annotation.Autowired;
 import top.robotman.atm.annotation.MyAnnotation;
 import top.robotman.atm.flipPages.FlipPage;
+
 @Controller
 @RequestMapping("/user")
 public class UserController extends BaseController {
-	
+
 	@org.springframework.beans.factory.annotation.Autowired
 	private UserService userService;
 
@@ -42,7 +43,7 @@ public class UserController extends BaseController {
 	public String toLogin(HttpServletRequest req, HttpServletResponse resp) {
 		return "login";
 	}
-	
+
 	@RequestMapping("/login")
 	@ResponseBody
 	public AjaxDTO login(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -52,7 +53,7 @@ public class UserController extends BaseController {
 		String password = req.getParameter("password");
 
 		try {
-			User user = userService.login(userName, DigestUtils.md5Hex(password+userName));
+			User user = userService.login(userName, DigestUtils.md5Hex(password + userName));
 
 			HttpSession httpSession = req.getSession(true);
 			httpSession.setAttribute("user", user);
@@ -69,12 +70,12 @@ public class UserController extends BaseController {
 			return dto;
 		}
 	}
-	
+
 	@RequestMapping("/toRegist")
 	public String toRegist(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		return "regist";
 	}
-	
+
 	@RequestMapping("/regist")
 	@ResponseBody
 	public AjaxDTO regist(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -91,7 +92,7 @@ public class UserController extends BaseController {
 				throw new BizException("账号重复");
 			}
 
-			int row = userService.regist(userName, DigestUtils.md5Hex(password+userName));
+			int row = userService.regist(userName, DigestUtils.md5Hex(password + userName));
 
 			dataTransfer.setFlag(true);
 			dataTransfer.setMessage("success");
@@ -104,12 +105,12 @@ public class UserController extends BaseController {
 			return dataTransfer;
 		}
 	}
-	
+
 	@RequestMapping("/upLoadIMG")
 	public String upLoadIMG(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		return "upLoadIMG";
 	}
-	
+
 	@RequestMapping("upLoad")
 	public void upLoad(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String savePath = req.getServletContext().getRealPath("/upload");
@@ -159,6 +160,7 @@ public class UserController extends BaseController {
 			e.printStackTrace();
 		}
 	}
+
 	@RequestMapping("/openImg")
 	public void openImg(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
@@ -177,7 +179,7 @@ public class UserController extends BaseController {
 		fis.close();
 		os.close();
 	}
-	
+
 	@RequestMapping("/loadBankcard")
 	@ResponseBody
 	public AjaxDTO loadBankcard(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -195,50 +197,50 @@ public class UserController extends BaseController {
 		try {
 			dto.setData(flipPage);
 			dto.setFlag(true);
-			
+
 			return dto;
 		} catch (BizException e) {
-			dto.setFlag(false);			
+			dto.setFlag(false);
 			return dto;
 		}
 	}
-	
+
 	@RequestMapping("/tochangePSW")
 	public String tochangePSW(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		return "changePSW";
 	}
-	
+
 	@RequestMapping("/changePSW")
 	@ResponseBody
-	public AjaxDTO changePSW(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	public AjaxDTO changePSW(String tmpPSW, String changePSW01, String changePSW02, HttpSession session123)
+			throws ServletException, IOException {
 		AjaxDTO dto = new AjaxDTO();
-		
-		HttpSession httpSession = req.getSession();
-		
-		User user = (User)httpSession.getAttribute("user");
-		
+
+		User user = (User) session123.getAttribute("user");
+
 		String username = user.getUsername();
 		String password = user.getPassword();
-		
-		String tmpPSW = req.getParameter("tmpPSW");
-		String changePSW01 = req.getParameter("changePSW01");
-		String changePSW02 = req.getParameter("changePSW02");
-		
-		String tmpPSWmd5 =  DigestUtils.md5Hex(tmpPSW+username);
-		String changePSW01md5 = DigestUtils.md5Hex(changePSW01+username);
-		
-		if(!password.equals(tmpPSWmd5)) {
+
+		// String tmpPSW = req.getParameter("tmpPSW");
+		// String changePSW01 = req.getParameter("changePSW01");
+		// String changePSW02 = req.getParameter("changePSW02");
+
+		String tmpPSWmd5 = DigestUtils.md5Hex(tmpPSW + username);
+		String changePSW01md5 = DigestUtils.md5Hex(changePSW01 + username);
+
+		if (!password.equals(tmpPSWmd5)) {
 			dto.setFlag(false);
 			dto.setMessage("原始密码错误");
 			return dto;
 		}
-		//执行修改密码的步骤
+		// 执行修改密码的步骤
 		System.out.println(tmpPSWmd5);
 		userService.changePSW(username, changePSW01md5);
-		//。。。。。。todo
-		
+		// 。。。。。。todo
+
 		dto.setFlag(true);
-		dto.setMessage("修改成功");	
+		dto.setMessage("修改成功");
+		session123.invalidate();
 		return dto;
 	}
 }
