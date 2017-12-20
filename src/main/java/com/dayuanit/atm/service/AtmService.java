@@ -20,5 +20,7 @@ public interface AtmService {
 	FlipPage queryFlow(String cardNum, String password,int currentPage);
 	
 	BankCard getBankCard(String cardNum);
+	
+	List<Flow> listFlowNearly(String username);
 
 }

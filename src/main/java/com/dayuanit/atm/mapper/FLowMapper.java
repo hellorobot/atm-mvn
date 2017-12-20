@@ -13,5 +13,7 @@ public interface FLowMapper {
 	List<Flow> listFlow(@Param("cardNum")String cardNum,@Param("currentPage")int currentPage,@Param("eachPageFlowsNum")int eachPageFlowsNum);
 	
 	int countFlow(@Param("cardNum")String cardNum);
+	
+	List<Flow> listFlowNearly(String ownername);
 
 }

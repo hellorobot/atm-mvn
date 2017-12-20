@@ -61,7 +61,7 @@
 					</div>
 
 					<div class="am-form-group tpl-login-remember-me">
-						<input id="remember-me" type="checkbox"> <label
+						<input id="xieyi" type="checkbox"> <label
 							for="remember-me"> 我已阅读并同意 <a href="javascript:;">《用户注册协议》</a>
 						</label>
 
@@ -88,6 +88,7 @@ function ajaxfun(data,status){
 	
 	var ajaxDto =  data;
 	
+	
 	if(ajaxDto.flag) {
 		alert("注册成功！");
 		window.location.href='/';
@@ -103,6 +104,12 @@ function ajaxfun(data,status){
 			password : $('#password').val(),
 			password2 : $('#password2').val(),
 		};
+		
+		var xieyi = document.getElementById("xieyi").checked
+		if(!xieyi){
+			alert("未经用户许可");
+			return;
+		}
 		if(createUser.password!=createUser.password2){
 			alert("两次密码不同，请重新输入");
 			return;

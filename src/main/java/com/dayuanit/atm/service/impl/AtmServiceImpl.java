@@ -229,4 +229,9 @@ public class AtmServiceImpl implements AtmService {
 	public BankCard getBankCard(String cardNum) {
 		return bcm.getBankCard(cardNum);
 	}
+
+	@Override
+	public List<Flow> listFlowNearly(String username) {	
+		return flowMapper.listFlowNearly(username);
+	}
 }

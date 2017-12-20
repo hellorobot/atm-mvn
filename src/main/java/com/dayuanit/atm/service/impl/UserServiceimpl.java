@@ -64,20 +64,21 @@ public class UserServiceimpl implements UserService {
 	}
 
 	@Override
-	public FlipPage getCardsPage(String username, int currentPage) {
+	public List<BankCard> getCardsPage(String username, int currentPage) {
 
 		FlipPage flipPage = new FlipPage();
 
-		List<BankCard> bankCardList = bankCardMapper2.getBankCardList(username, flipPage.getStartNum(currentPage),
-				FlipPage.EVERY_PAGE_FLOW_NUM);
-		flipPage.setCurrentPage(currentPage);
-		flipPage.setObj(bankCardList);
+//		List<BankCard> bankCardList = bankCardMapper2.getBankCardList(username, flipPage.getStartNum(currentPage),
+//				FlipPage.EVERY_PAGE_FLOW_NUM);
+		List<BankCard> bankCardList = bankCardMapper2.getBankCardList(username, null, null);
+//		flipPage.setCurrentPage(currentPage);
+//		flipPage.setObj(bankCardList);
 
 		int cardsNum = bankCardMapper2.getBankCardListNum(username);
-		flipPage.setFlowsNum(cardsNum);
-		flipPage.setPagesNumxxx(cardsNum);
-
-		return flipPage;
+//		flipPage.setFlowsNum(cardsNum);
+//		flipPage.setPagesNumxxx(cardsNum);
+//		return flipPage;
+		return bankCardList;
 	}
 
 	@Override

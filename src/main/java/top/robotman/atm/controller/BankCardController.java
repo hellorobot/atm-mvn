@@ -20,6 +20,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dayuanit.atm.domain.BankCard;
 import com.dayuanit.atm.domain.Flow;
@@ -29,7 +30,7 @@ import com.dayuanit.atm.service.UserService;
 import com.dayuanit.atm.service.impl.AtmServiceImpl;
 import com.dayuanit.atm.service.impl.UserServiceimpl;
 
-
+import top.robotman.atm.ajaxDTO.AjaxDTO;
 import top.robotman.atm.annotation.MyAnnotation;
 import top.robotman.atm.flipPages.FlipPage;
 @Controller
@@ -114,6 +115,20 @@ public class BankCardController extends BaseController {
 		req.setAttribute("flipPage", flipPage);
 		return "flow";
 	}
+	
+	@RequestMapping("/loadNearFlow")
+	@ResponseBody
+	public AjaxDTO loadNearFlow(HttpSession session) throws ServletException, IOException {
+		User user = (User)session.getAttribute("user");		
+		List<Flow> listFlow = seivice.listFlowNearly(user.getUsername());
+		
+		AjaxDTO dto = new AjaxDTO();
+		dto.setFlag(true);
+		dto.setData(listFlow);
+		
+		return dto;
+	}
+	
 	
 	@RequestMapping("/downFlow")
 	public void downFlow(HttpServletRequest req, HttpServletResponse resp) throws UnsupportedEncodingException {

@@ -31,7 +31,11 @@
     <select id="getBankCardList" resultMap="bankCardMap">
 	    select <include refid="bankCard_filed"></include>
 	    from atm_back_card 
-	    where owner_name = #{userName} limit #{startPoint},#{MoveLength}
+	    where owner_name = #{userName} 
+	    <!-- 动态sql语句 -->
+	    <if test="startPoint != null">
+	    limit #{startPoint},#{MoveLength}
+	    </if>
   </select>
   
    <select id="getBankCardListNum" resultType="int">

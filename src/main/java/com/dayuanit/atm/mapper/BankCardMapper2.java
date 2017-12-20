@@ -14,7 +14,7 @@ public interface BankCardMapper2 {
 	
 	int modifyBalance(@Param("cardNum") String cardNum, @Param("balance") String balance, @Param("version") int version);
 	
-	List<BankCard> getBankCardList(@Param("userName")String userName,@Param("startPoint")int startPoint,@Param("MoveLength")int MoveLength);
+	List<BankCard> getBankCardList(@Param("userName")String userName,@Param("startPoint")Integer startPoint,@Param("MoveLength")Integer MoveLength);
 	
 	int getBankCardListNum(String userName);
 }

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
+import com.dayuanit.atm.domain.BankCard;
 import com.dayuanit.atm.domain.User;
 import com.dayuanit.atm.exception.BizException;
 import com.dayuanit.atm.service.AtmService;
@@ -198,18 +199,14 @@ public class UserController extends BaseController {
 	@ResponseBody
 	public AjaxDTO loadBankcard(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		String currentPage = req.getParameter("currentPage");
-
 		HttpSession httpSession = req.getSession(true);
 		User user = (User) httpSession.getAttribute("user");
 
-		currentPage = currentPage == null ? "1" : currentPage;
-
-		FlipPage flipPage = userService.getCardsPage(user.getUsername(), Integer.parseInt(currentPage));
+		List<BankCard> cardlist = userService.getCardsPage(user.getUsername(), 1);
 
 		AjaxDTO dto = new AjaxDTO();
 		try {
-			dto.setData(flipPage);
+			dto.setData(cardlist);
 			dto.setFlag(true);
 
 			return dto;
