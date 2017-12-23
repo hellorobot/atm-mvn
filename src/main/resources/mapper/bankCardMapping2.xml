@@ -6,7 +6,7 @@
  
 <mapper namespace="com.dayuanit.atm.mapper.BankCardMapper2">
 
-	<resultMap type="bankCard" id="bankCardMap">
+	<resultMap type="BankCard" id="bankCardMap">
 		<id property="id" column="id"/>
 		<result property="cardNum" column="card_num"/>
 		<result property="balance" column="balance"/>
@@ -32,6 +32,7 @@
 	    select <include refid="bankCard_filed"></include>
 	    from atm_back_card 
 	    where owner_name = #{userName} 
+	    order by balance desc
 	    <!-- 动态sql语句 -->
 	    <if test="startPoint != null">
 	    limit #{startPoint},#{MoveLength}

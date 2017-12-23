@@ -64,7 +64,7 @@ public class UserServiceimpl implements UserService {
 	}
 
 	@Override
-	public List<BankCard> getCardsPage(String username, int currentPage) {
+	public List<BankCard> getCardsPage(String username, Integer currentPage) {
 
 		FlipPage flipPage = new FlipPage();
 

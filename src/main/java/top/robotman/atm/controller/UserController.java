@@ -2,6 +2,7 @@ package top.robotman.atm.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.WebUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.dayuanit.atm.domain.BankCard;
@@ -49,29 +51,13 @@ public class UserController extends BaseController {
 
 	@RequestMapping("/login")
 	@ResponseBody
-	public AjaxDTO login(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		AjaxDTO dto = new AjaxDTO();
+	public AjaxDTO login(HttpSession session,String userName,String password) throws IOException {
+			
+		User user = userService.login(userName, DigestUtils.md5Hex(password + userName));
 
-		String userName = req.getParameter("userName");
-		String password = req.getParameter("password");
+		session.setAttribute("user", user);
 
-		try {
-			User user = userService.login(userName, DigestUtils.md5Hex(password + userName));
-
-			HttpSession httpSession = req.getSession(true);
-			httpSession.setAttribute("user", user);
-
-			dto.setFlag(true);
-			dto.setMessage("success");
-
-			return dto;
-		} catch (BizException be) {
-
-			dto.setFlag(false);
-			dto.setMessage(be.getMessage());
-
-			return dto;
-		}
+		return AjaxDTO.success("success");	
 	}
 
 	@RequestMapping("/toRegist")
@@ -114,16 +100,20 @@ public class UserController extends BaseController {
 		return "upLoadIMG";
 	}
 	@RequestMapping("/upLoad2")
-	public void upLoad(MultipartFile file1,HttpServletRequest req,HttpSession session) {
-		System.out.println(">>>>>>[][][][]"+file1.getName());
-		String rp = req.getServletContext().getRealPath("/");
-        File uploadedFile = new File(rp + "/WEB-INF/upload/" + "1.jpg");
+	public void upLoad(MultipartFile file1,HttpServletResponse resp,HttpSession session) throws IllegalStateException, IOException{
+		//System.out.println(">>>>>>[][][][]"+file1.getName());
+		System.out.println("上传图片ing。。。。。。。。。");
+		String rp = WebUtils.getRealPath(session.getServletContext(), "");
+		
+		User user = (User)session.getAttribute("user");
+        File uploadedFile = new File(rp + "/upload/" + user.getId());
         
-		try {
 			file1.transferTo(uploadedFile);
-		} catch (IllegalStateException | IOException e) {
-			e.printStackTrace();
-		}
+			OutputStream out = resp.getOutputStream();
+			out.write("<script type=\"text/javascript\">parent.loadAvatar();</script>".getBytes());
+			out.flush();
+			out.close();			
+
 	}
 
 	@RequestMapping("/upLoad")

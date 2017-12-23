@@ -11,7 +11,7 @@ public interface UserService {
 	
 	User login(String username, String password);
 	
-	List<BankCard> getCardsPage(String username,int startPage);
+	List<BankCard> getCardsPage(String username,Integer startPage);
 	
 	int regist(String username, String password);
 	

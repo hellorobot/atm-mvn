@@ -1,4 +1,5 @@
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.util.List;
@@ -11,7 +12,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.dayuanit.atm.domain.BankCard;
 import com.dayuanit.atm.domain.Flow;
+import com.dayuanit.atm.mapper.BankCardMapper2;
 import com.dayuanit.atm.mapper.FLowMapper;
 import com.dayuanit.atm.mapper.UserMapper;
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -23,6 +26,8 @@ public class testmap {
 	public UserMapper usermap;
 	@Autowired
 	public FLowMapper flowrmap;
+	@Autowired
+	public BankCardMapper2 bcm;
 	
 //	@Test
 //	public void testMapper() {
@@ -31,12 +36,11 @@ public class testmap {
 //	}
 	@Test
 	public void testMapper() {
-		List<Flow> flow = flowrmap.listFlowNearly("zz");
-		for(Flow xx :flow) {
-			System.out.println(xx.getCardNum());
-		}
-
-	assertNull(flowrmap.listFlowNearly("zz"));	
+		BankCard bc = bcm.getBankCard("1000000");
+		System.out.println(bc.getBalance());
+		System.out.println(bc.getPassword());
+		assertNotNull(bc);
+	
 }
 	
 	

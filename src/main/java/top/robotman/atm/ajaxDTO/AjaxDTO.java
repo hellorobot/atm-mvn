@@ -33,6 +33,27 @@ public class AjaxDTO {
 		this.data = data;
 	}
 	
+	public static AjaxDTO success(String message) {
+		AjaxDTO dto = new AjaxDTO();
+		dto.setFlag(true);
+		dto.setMessage(message);
+		return dto;
+	}
+//重载方法	
+	public static AjaxDTO success(Object obj) {
+		AjaxDTO dto = new AjaxDTO();
+		dto.setFlag(true);
+		dto.setData(obj);
+		return dto;
+	}
+	
+	public static AjaxDTO fail(String message) {
+		AjaxDTO dto = new AjaxDTO();
+		dto.setFlag(false);
+		dto.setMessage(message);
+		return dto;
+	}
+	
 	
 
 }

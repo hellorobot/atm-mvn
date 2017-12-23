@@ -43,4 +43,9 @@
 			</list>
 		</property>
 	</bean>
+
+	
+	<mvc:resources mapping="/image/**" location="/upload/" cache-period="31556926" />
+	
 </beans>
+
