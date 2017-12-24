@@ -68,16 +68,16 @@ public class BankCardController extends BaseController {
 	@ResponseBody
 	public AjaxDTO loadBankcard(HttpSession session) {
 		User user = (User) session.getAttribute("user");
-		List<BankCard> list = userService.getCardsPage(user.getUsername(),null);
-		
+		List<BankCard> list = userService.getCardsPage(user.getUsername(), null);
+
 		return AjaxDTO.success(list);
 	}
-	
+
 	@RequestMapping("/draw")
 	@ResponseBody
-	public AjaxDTO draw(String cardnum,String password,String amount) {
+	public AjaxDTO draw(String cardnum, String password, String amount) {
 		seivice.draw(amount, cardnum, password);
-		
+
 		return AjaxDTO.success("取款成功");
 	}
 
@@ -86,54 +86,49 @@ public class BankCardController extends BaseController {
 		return "save";
 	}
 
-	@RequestMapping("/saveMoney")
-	public String saveMoney(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String amount = req.getParameter("amount");
-		String cardNum = req.getParameter("cardNum");
-		String password = req.getParameter("password");
+	@RequestMapping("/save")
+	@ResponseBody
+	public AjaxDTO save(String amount, String password, String cardnum) {
 
-		seivice.deposit(amount, cardNum, password);
+		seivice.deposit(amount, cardnum, password);
 
-		BankCard bc = seivice.getBankCard(cardNum);
-		req.setAttribute("bc", bc);
-		return "openAccount";
+		return AjaxDTO.success("存款成功");
 	}
 
+	@RequestMapping("/toTransfer")
+	public String toTransfer() {
+		return "transfer";
+	}
+
+	// outCardnum : $('#transfer-incardnum').val(),
+	// inCardnum : $('#transfer-incardnum').val(),
+	// amount : $('#transfer-amount').val(),
+	// password : $('#transfer-password').val()
 	@RequestMapping("/transfer")
-	public String transfer(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String amount = req.getParameter("amount");
-		String cardNumOut = req.getParameter("cardNumOut");
-		String password = req.getParameter("password");
-		String cardNumIn = req.getParameter("cardNumIn");
+	@ResponseBody
+	public AjaxDTO transfer(String outCardnum, String inCardnum, String amount, String password) {
 
-		seivice.transfer(amount, cardNumIn, cardNumOut, password);
+		seivice.transfer(amount, inCardnum, outCardnum, password);
 
-		BankCard bc = seivice.getBankCard(cardNumOut);
-		req.setAttribute("bc", bc);
-		return "openAccount";
+		return AjaxDTO.success("转账成功");
 	}
 
 	@RequestMapping("/toFlow")
-	public String toFlow(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String cardNum = req.getParameter("cardNum");
-
-		req.setAttribute("cardNum", cardNum);
+	public String toFlow() {
 		return "flow";
 	}
 
 	@RequestMapping("/qureyFlow")
-	public String qureyFlow(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-		String cardNum = req.getParameter("cardNum");
-		String password = req.getParameter("password");
-		String currentPage = req.getParameter("currentPage");
+	@ResponseBody
+	public AjaxDTO qureyFlow(String cardNum,String password,String currentPage){
+		System.out.println("----流水信息=====");
+//		cardNum = req.getParameter("cardNum");
+//		password = req.getParameter("password");
+//		currentPage = req.getParameter("currentPage");
 
 		FlipPage flipPage = seivice.queryFlow(cardNum, password, Integer.parseInt(currentPage));
-
-		req.setAttribute("cardNum", cardNum);
-		req.setAttribute("password", password);
-		req.setAttribute("flipPage", flipPage);
-		return "flow";
+		System.out.println("查询流水======"+flipPage.getCurrentPage()+"[xxxxx]"+flipPage.getFlowsNum());
+		return AjaxDTO.success(flipPage);
 	}
 
 	@RequestMapping("/loadNearFlow")

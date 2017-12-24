@@ -29,7 +29,9 @@
 		select
 		<include refid="flow_filed"></include>
 		from atm_flow
-		where card_num = #{cardNum} LIMIT #{currentPage},#{eachPageFlowsNum};
+		where card_num = #{cardNum} 
+		order by create_time desc
+		LIMIT #{currentPage},#{eachPageFlowsNum} ;
 	</select>
 
 	<select id="listFlowNearly" resultMap="flowMapper">

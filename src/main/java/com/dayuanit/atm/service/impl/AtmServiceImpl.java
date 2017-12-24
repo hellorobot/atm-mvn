@@ -1,6 +1,10 @@
 package com.dayuanit.atm.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.crypto.Data;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
@@ -17,6 +21,7 @@ import com.dayuanit.atm.service.AtmService;
 import com.dayuanit.atm.utils.CardUtils;
 import com.dayuanit.atm.utils.MoneyUtil;
 
+import top.robotman.atm.ajaxDTO.FlowDto;
 import top.robotman.atm.annotation.Component;
 import top.robotman.atm.flipPages.FlipPage;
 
@@ -106,13 +111,13 @@ public class AtmServiceImpl implements AtmService {
 		if (StringUtils.isBlank(password)) {
 			throw new BizException("密码不能为空");
 		}
-		
+
 		BankCard bankCard = bcm.getBankCard(cardNum);
-		
+
 		if (bankCard == null) {
 			throw new BizException("卡号不存在");
 		}
-		
+
 		if (!bankCard.getPassword().equals(password)) {
 			throw new BizException("密码错误");
 		}
@@ -153,16 +158,24 @@ public class AtmServiceImpl implements AtmService {
 			throw new BizException("转出的卡不存在");
 		}
 
+		if (outCardNum.equals(inCardNum)) {
+			throw new BizException("QAQ你不能转给自己");
+		}
+
 		if (!outCard.getPassword().equals(password)) {
 			throw new BizException("密码错误");
 		}
 
 		amount = CardUtils.checkAmountAndFormat(amount);
-		System.out.println("format=" + amount);
 
 		String newBalance = MoneyUtil.sub(outCard.getBalance(), amount);
 
+		// System.out.println("[转出：]==========" + outCardNum);
+		// System.out.println("[余额：]==========" + outCard.getBalance());
+		// System.out.println("[转出金额：]==========" + amount);
+		// System.out.println("[金额差：]==========" + newBalance);
 		if (Double.parseDouble(newBalance) < 0) {
+
 			throw new BizException("余额不足");
 		}
 
@@ -212,25 +225,45 @@ public class AtmServiceImpl implements AtmService {
 	public FlipPage queryFlow(String cardNum, String password, int currentPage) {
 		FlipPage filpPage = new FlipPage();
 
-		BankCard bankCard = bcm.getBankCard(cardNum);
 		if (StringUtils.isBlank(cardNum)) {
 			throw new BizException("卡号不能为空");
 		}
 
+		BankCard bankCard = bcm.getBankCard(cardNum);
+		if (bankCard == null) {
+			throw new BizException("卡号不存在");
+		}
+
 		if (!bankCard.getPassword().equals(password)) {
-			throw new BizException("queryFlow Exception2");
+			throw new BizException("密码错误");
 		}
 
 		filpPage.setCurrentPage(currentPage);
 		List<Flow> list1 = flowMapper.listFlow(cardNum, filpPage.getStartNum(currentPage),
 				FlipPage.EVERY_PAGE_FLOW_NUM);
+		List<FlowDto> flowlist = new ArrayList<FlowDto>(list1.size());
+		
+		for (Flow flow : list1) {
+			FlowDto dto = new FlowDto();
+			
+			SimpleDateFormat myFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String data = myFmt.format(flow.getCreateTime());
+			
+			dto.setAmount(flow.getAmount());
+			dto.setCardNum(cardNum);
+			dto.setDescript(flow.getDescript());
+			dto.setId(flow.getId());
+			dto.setCreateTime(data);
+			
+			flowlist.add(dto);
+	}
 
 		int flowsNum = flowMapper.countFlow(cardNum);
 
 		filpPage.setFlowsNum(flowsNum);
 		filpPage.setPagesNumxxx(flowsNum);
 
-		filpPage.setObj(list1);
+		filpPage.setObj(flowlist);
 		return filpPage;
 	}
 

@@ -38,10 +38,11 @@
 									</label>
 									<div class="am-u-sm-9">
 										<select data-am-selected="{searchBox: 1}"
-											style="display: none;">
+											style="display: none;" id="select">
 											
 											<option value="no">请选择银行卡</option>
-											<option id="draw-cardnum" v-for="todo in todos"> {{ todo.cardNum }}</option>
+											<option id="draw-cardnum" v-for="todo in todos"
+											v-bind:value="todo.cardNum"> {{ todo.cardNum }}</option>
 										</select>
 
 									</div>
@@ -123,7 +124,7 @@ $('#draw-button').click(function(){
 	$.post('/bankCard/draw.do ',{
 		amount : $('#draw-amount').val(),
 		password : $('#draw-password').val(),
-		cardnum : $('#draw-cardnum').val()
+		cardnum : $('#select').val()
 	},function(data,status){
 		
 		if(data.flag){

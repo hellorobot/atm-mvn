@@ -12,7 +12,7 @@
 
 
 <!-- 内容区域 -->
-<div class="tpl-content-wrapper" id="draw">
+<div class="tpl-content-wrapper" id="save">
 
 	<div class="row-content am-cf">
 		<div class="row  am-cf">
@@ -22,7 +22,7 @@
 				<div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
 					<div class="widget am-cf">
 						<div class="widget-head am-cf">
-							<div class="widget-title am-fl">取款操作</div>
+							<div class="widget-title am-fl">存款操作</div>
 							<div class="widget-function am-fr">
 								<a href="javascript:;" class="am-icon-cog"></a>
 							</div>
@@ -36,15 +36,20 @@
 									<label for="user-phone" class="am-u-sm-3 am-form-label">银行卡
 										<span class="tpl-form-line-small-title"></span>
 									</label>
+									
 									<div class="am-u-sm-9">
-										<select data-am-selected="{searchBox: 1}"
-											style="display: none;">
+									
+										<select data-am-selected="{searchBox: 1}" v-model="selected"
+											style="display: none;" id="myselected">
 											
-											<option value="no">请选择银行卡</option>
-											<option id="draw-cardnum" v-for="todo in todos"> {{ todo.cardNum }}</option>
+											<option >请选择银行卡</option>
+											<option id="save-cardnum"  v-for="todo in todos"
+											v-bind:value="todo.cardNum"> {{ todo.cardNum }}</option>
 										</select>
-
+								<!--  不知为何，不现实vue提供的{{ selected }}-->
+										 <span >Selected: {{ selected }}</span>
 									</div>
+																
 								</div>
 
 								<div class="am-form-group">
@@ -52,8 +57,8 @@
 										<span class="tpl-form-line-small-title"></span>
 									</label>
 									<div class="am-u-sm-9">
-										<input type="text" class="tpl-form-input" id="draw-amount"
-											placeholder="请输入取款金額"> <small></small>
+										<input type="text" class="tpl-form-input" id="save-amount"
+											placeholder="请输入存款金額"> <small></small>
 									</div>
 								</div>
 
@@ -62,19 +67,16 @@
 										<span class="tpl-form-line-small-title"></span>
 									</label>
 									<div class="am-u-sm-9">
-										<input type="password" class="tpl-form-input" id="draw-password"
+										<input type="password" class="tpl-form-input" id="save-password"
 											placeholder="请输入6位银行卡密码"> <small></small>
 									</div>
 								</div>
 
 
-
-
-
 								<div class="am-form-group">
 									<div class="am-u-sm-9 am-u-sm-push-3">
-										<button type="button" id="draw-button"
-											class="am-btn am-btn-primary tpl-btn-bg-color-success ">取款</button>
+										<button type="button" id="save-button"
+											class="am-btn am-btn-primary tpl-btn-bg-color-success ">存款</button>
 									</div>
 								</div>
 							</form>
@@ -95,10 +97,12 @@
 <jsp:include page="common/footer.jsp"></jsp:include>
 <script type="text/javascript">
 
-var app4 = new Vue({
-	  el: '#draw',
+
+var app5 = new Vue({
+	  el: '#save',
 	  data: {
-	    todos: []
+	    todos: [],
+	    selected : 'a'
 	  }
 	})
 
@@ -114,20 +118,25 @@ $(document).ready(function() {
 function loadBankcard(){
 	$.post('/bankCard/loadBankcard.do ',{},function(data,status){
 		var list = data.data;
-		app4.todos = list;
+		app5.todos = list;
+
 	});	
 }
 //按钮点击事件
-$('#draw-button').click(function(){
-
-	$.post('/bankCard/draw.do ',{
-		amount : $('#draw-amount').val(),
-		password : $('#draw-password').val(),
-		cardnum : $('#draw-cardnum').val()
+$('#save-button').click(function(){
+//	js获取select单选框
+// 	var obj=document.getElementById('myselected');
+// 	var index=obj.selectedIndex; //序号，取当前选中选项的序号
+// 	var val = obj.options[index].value;
+//	alert(val);
+	//校验卡号是否准确
+	$.post('/bankCard/save.do ',{
+		amount : $('#save-amount').val(),
+		password : $('#save-password').val(),
+		cardnum : $('#myselected').val()
 	},function(data,status){
-		
 		if(data.flag){
-			RB.alert(true,data.message,'/bankCard/toDraw.do');
+			RB.alert(true,data.message,'/bankCard/toSave.do');
 		}else{
 			RB.alert(false,data.message);
 		}

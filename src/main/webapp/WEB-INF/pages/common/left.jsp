@@ -45,15 +45,21 @@
 				class="am-icon-wpforms sidebar-nav-link-logo"></i> 存款
 
 		</a></li>
-		<li class="sidebar-nav-link"><a href="transfer.html"> <i
+		<li class="sidebar-nav-link"><a href="/bankCard/toTransfer.do" id="turn-transfer"> <i
 				class="am-icon-wpforms sidebar-nav-link-logo"></i> 转账
 
 		</a></li>
 
-		<li class="sidebar-nav-link"><a href="flow.html"> <i
+		<li class="sidebar-nav-link"><a href="/bankCard/toFlow.do" id="turn-flow"> <i
 				class="am-icon-bar-chart sidebar-nav-link-logo"></i> 流水
 
 		</a></li>
+		
+		<li class="sidebar-nav-link"><a href="/test.jsp"> <i
+				class="am-icon-bar-chart sidebar-nav-link-logo"></i> js测试
+
+		</a></li>
+		
 
 	</ul>
 </div>

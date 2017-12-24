@@ -1,7 +1,7 @@
 package top.robotman.atm.flipPages;
 
 public class FlipPage {
-	public static final int EVERY_PAGE_FLOW_NUM = 5;
+	public static final int EVERY_PAGE_FLOW_NUM = 7;
 	private int currentPage=1;
 	private int pagesNum=1;
 	private int flowsNum;
