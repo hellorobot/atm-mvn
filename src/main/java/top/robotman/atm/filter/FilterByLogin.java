@@ -11,13 +11,14 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.alibaba.fastjson.JSON;
 
 import top.robotman.atm.ajaxDTO.AjaxDTO;
+
+
 
 public class FilterByLogin implements Filter {
 
@@ -79,7 +80,7 @@ public class FilterByLogin implements Filter {
 		String x = req.getHeader("X-Requested-With");
 		
 		if(null == x || "".equals(x)) {
-			System.out.println("重定向sx");
+			//System.out.println("重定向sx");
 			resp.sendRedirect("/user/toLogin.do");	
 			
 //			OutputStream os = resp.getOutputStream();
@@ -102,7 +103,7 @@ public class FilterByLogin implements Filter {
 				os.write(JSON.toJSONString(dto).getBytes("UTF-8"));
 				os.flush();
 				System.out.println(JSON.toJSONString(dto));
-				System.out.println("ajax请求111，sx");
+				//System.out.println("ajax请求111，sx");
 				return;
 			}			
 		}
@@ -110,7 +111,7 @@ public class FilterByLogin implements Filter {
 
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
-		System.out.println("=======login [11112] filter=======");
+		//System.out.println("=======login [11112] filter=======");
 
 	}
 

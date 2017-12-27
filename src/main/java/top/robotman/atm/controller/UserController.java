@@ -2,7 +2,6 @@ package top.robotman.atm.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
@@ -16,26 +15,17 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.WebUtils;
 
-import com.alibaba.fastjson.JSON;
 import com.dayuanit.atm.domain.BankCard;
 import com.dayuanit.atm.domain.User;
 import com.dayuanit.atm.exception.BizException;
-import com.dayuanit.atm.service.AtmService;
 import com.dayuanit.atm.service.UserService;
-import com.dayuanit.atm.service.impl.AtmServiceImpl;
-import com.dayuanit.atm.service.impl.UserServiceimpl;
-
 import top.robotman.atm.ajaxDTO.AjaxDTO;
-import top.robotman.atm.annotation.Autowired;
-import top.robotman.atm.annotation.MyAnnotation;
-import top.robotman.atm.flipPages.FlipPage;
 
 @Controller
 @RequestMapping("/user")

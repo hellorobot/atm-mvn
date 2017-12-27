@@ -3,11 +3,8 @@ package top.robotman.atm.controller;
 import java.io.BufferedWriter;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -26,11 +23,7 @@ import com.dayuanit.atm.domain.Flow;
 import com.dayuanit.atm.domain.User;
 import com.dayuanit.atm.service.AtmService;
 import com.dayuanit.atm.service.UserService;
-import com.dayuanit.atm.service.impl.AtmServiceImpl;
-import com.dayuanit.atm.service.impl.UserServiceimpl;
-
 import top.robotman.atm.ajaxDTO.AjaxDTO;
-import top.robotman.atm.annotation.MyAnnotation;
 import top.robotman.atm.flipPages.FlipPage;
 
 @Controller
@@ -108,7 +101,7 @@ public class BankCardController extends BaseController {
 	@ResponseBody
 	public AjaxDTO transfer(String outCardnum, String inCardnum, String amount, String password) {
 
-		seivice.transfer(amount, inCardnum, outCardnum, password);
+		seivice.newTransfer(amount, inCardnum, outCardnum, password);
 
 		return AjaxDTO.success("转账成功");
 	}

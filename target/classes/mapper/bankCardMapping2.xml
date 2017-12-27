@@ -55,6 +55,25 @@
   	UPDATE atm_back_card set balance=#{balance}, version = version + 1, modify_time=now() 
   	where card_num=#{cardNum} and version=#{version};
   </update>
+<!-- 流水task登记表 -->  
+  <insert id="addTransferTask">
+ 	 INSERT INTO transfer_quartz
+ 	 (status,amount,out_cardnum,in_cardnum,createtime,modifytime)
+	VALUE(#{status},#{amount},#{outCardnum},#{inCardnum},NOW(),NOW());
+  </insert>
+  
+  <select id="qureyTransferTask" resultType="TransferTask">
+	  select id,status,amount,out_cardnum as outCardnum,in_cardnum as inCardnum,createtime,modifytime 
+	  from transfer_quartz 
+	  WHERE createtime &lt;= #{tmptime}
+	  and status=#{status};
+  </select>
+  
+    <update id="modifyTransferTask" >
+   	UPDATE transfer_quartz  set
+	  status=#{status},modifytime = now()
+	  WHERE id=#{id};
+  </update>
   
   
 </mapper>

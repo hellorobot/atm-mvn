@@ -3,24 +3,19 @@ package com.dayuanit.atm.service.impl;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import com.dayuanit.atm.db.DataBase;
 import com.dayuanit.atm.domain.BankCard;
 import com.dayuanit.atm.domain.User;
 import com.dayuanit.atm.exception.BizException;
-import com.dayuanit.atm.mapper.BankCardMapper;
 import com.dayuanit.atm.mapper.BankCardMapper2;
 import com.dayuanit.atm.mapper.UserMapper;
 import com.dayuanit.atm.service.UserService;
 
 
-import top.robotman.atm.annotation.Component;
 import top.robotman.atm.flipPages.FlipPage;
-
+@Service
 public class UserServiceimpl implements UserService {
 	@Autowired
 	private UserMapper usermp;
@@ -33,6 +28,7 @@ public class UserServiceimpl implements UserService {
 		return user;
 	}
 
+	@Override
 	public int regist(String username, String password) throws BizException {
 		
 		if (StringUtils.isBlank(username)) {

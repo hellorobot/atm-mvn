@@ -1,7 +1,5 @@
 package top.robotman.atm.ajaxDTO;
 
-import java.util.Date;
-
 public class FlowDto {
 	private Integer id;
 	private String cardNum;

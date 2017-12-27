@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:tx="http://www.springframework.org/schema/tx"
-    xmlns:context="http://www.springframework.org/schema/context"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/tx
         http://www.springframework.org/schema/tx/spring-tx.xsd
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
 	<!-- scan package -->
-	<context:component-scan base-package="com.dayuanit"/>
-	<context:component-scan base-package="top.robotman"/>
+	<context:component-scan base-package="com.dayuanit" />
+	<context:component-scan base-package="top.robotman" />
 	<!-- open transaction -->
-	<tx:jta-transaction-manager />
+	<!--  
+	<tx:jta-transaction-manager /> 
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> 
+		<property name="dataSource" ref="dataSource" /> </bean>
 
-	<bean id="transactionManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
+
 
 	<bean id="AtmService" class="com.dayuanit.atm.service.impl.AtmServiceImpl"></bean>
 	<bean id="UserService" class="com.dayuanit.atm.service.impl.UserServiceimpl"></bean>
@@ -28,7 +27,7 @@
 
 	<bean id="user" class="top.robotman.atm.controller.UserController">
 	</bean>
-
+-->
 
 
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
@@ -57,6 +56,17 @@
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
 	</bean>
 
+
+<!-- 开启事务控制的注解支持 -->  
+	<tx:annotation-driven transaction-manager="txManager" />
+
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+		<!--<property name="nestedTransactionAllowed" value="true"/>-->
+	</bean>
+<!-- 导入task文件 -->
+	<import resource="classpath:springXML/spring-task.xml" />
 
 	<!-- more bean definitions go here -->
 

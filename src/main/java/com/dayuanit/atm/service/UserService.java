@@ -5,7 +5,7 @@ import java.util.List;
 import com.dayuanit.atm.domain.BankCard;
 import com.dayuanit.atm.domain.User;
 
-import top.robotman.atm.flipPages.FlipPage;
+
 
 public interface UserService {
 	

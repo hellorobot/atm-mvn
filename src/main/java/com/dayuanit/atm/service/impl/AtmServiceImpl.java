@@ -1,36 +1,40 @@
 package com.dayuanit.atm.service.impl;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.crypto.Data;
-
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.dayuanit.atm.db.DataBase;
 import com.dayuanit.atm.domain.BankCard;
 import com.dayuanit.atm.domain.Flow;
+import com.dayuanit.atm.domain.TransferTask;
 import com.dayuanit.atm.exception.BizException;
 import com.dayuanit.atm.mapper.BankCardMapper2;
 import com.dayuanit.atm.mapper.FLowMapper;
 import com.dayuanit.atm.service.AtmService;
+import com.dayuanit.atm.service.BtmSerivice;
 import com.dayuanit.atm.utils.CardUtils;
 import com.dayuanit.atm.utils.MoneyUtil;
 
 import top.robotman.atm.ajaxDTO.FlowDto;
-import top.robotman.atm.annotation.Component;
 import top.robotman.atm.flipPages.FlipPage;
-
+@Service
 public class AtmServiceImpl implements AtmService {
 
 	@Autowired
 	private BankCardMapper2 bcm;
 	@Autowired
 	private FLowMapper flowMapper;
+	@Autowired
+	private BtmSerivice btm;
+	
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -51,7 +55,7 @@ public class AtmServiceImpl implements AtmService {
 		}
 
 		if (null == cardNum) {
-			throw new BizException("锟斤拷锟斤拷锟截革拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷");
+			throw new BizException("卡号不能为空");
 		}
 
 		bankCard.setCardNum(cardNum);
@@ -61,7 +65,7 @@ public class AtmServiceImpl implements AtmService {
 		;
 		int rows = bcm.addCard(bankCard);
 		if (1 != rows) {
-			throw new BizException("x'x'x");
+			throw new BizException("开户失败");
 		}
 		return bankCard;
 	}
@@ -275,5 +279,143 @@ public class AtmServiceImpl implements AtmService {
 	@Override
 	public List<Flow> listFlowNearly(String username) {
 		return flowMapper.listFlowNearly(username);
+	}
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public int newTransfer(String amount, String inCardNum, String outCardNum, String password) {
+		BankCard outCard = bcm.getBankCard(outCardNum);
+		BankCard inCard = bcm.getBankCard(inCardNum);
+		
+		if (null == outCard) {
+			throw new BizException("转出的卡不存在");
+		}
+
+		if (outCardNum.equals(inCardNum)) {
+			throw new BizException("QAQ你不能转给自己");
+		}
+
+		if (!outCard.getPassword().equals(password)) {
+			throw new BizException("密码错误");
+		}
+		
+		if (null == inCard) {
+			throw new BizException("转入卡号不存在");
+		}
+
+		amount = CardUtils.checkAmountAndFormat(amount);
+		String newBalance = MoneyUtil.sub(outCard.getBalance(), amount);
+		if (Double.parseDouble(newBalance) < 0) {
+			throw new BizException("余额不足");
+		}
+
+		outCard.setBalance(newBalance);
+		int rows = bcm.modifyBalance(outCard.getCardNum(), outCard.getBalance(), outCard.getVersion());
+		if (1 != rows) {
+			throw new BizException("转账故障");
+		}
+//写入流水
+		Flow flow = new Flow();
+		flow.setAmount(amount);
+		flow.setCardNum(outCardNum);
+		flow.setDescript("转出");
+		flow.setFlowType(3);
+
+		rows = flowMapper.addFlow(flow);
+		if (1 != rows) {
+			throw new BizException("流水写入失败");
+		}
+//写入待转记录表
+		int row = bcm.addTransferTask(0, amount, outCardNum, inCardNum);
+		if (1 != row) {
+			throw new BizException("转账task开启失败");
+		}	
+		
+		return row;
+	}
+
+	@Override
+	public List<TransferTask> listTransferTask(LocalDateTime time,Integer status) {
+
+		List<TransferTask> list = bcm.qureyTransferTask(time, status);
+		
+		int i=0;
+		for (TransferTask tt : list) {
+			i++;
+			System.out.println(i+"======================" + tt.getId());
+		}
+		return list;
+	}
+	
+	
+	
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public int newTransferIN(String amount, String inCardNum,Integer id) {
+		
+		BankCard inCard = bcm.getBankCard(inCardNum);
+		if (null == inCard) {
+			btm.successTrans(bcm,id);
+			throw new BizException("转入银行卡不存在");
+		}
+		
+		String inBalance =  MoneyUtil.plus(inCard.getBalance(), amount);
+		
+		inCard.setBalance(inBalance);
+		int rows = bcm.modifyBalance(inCard.getCardNum(), inCard.getBalance(), inCard.getVersion());
+		if (1 != rows) {
+			btm.successTrans(bcm,id);
+			throw new BizException("转入id:"+id+"转账失败");
+		}
+		
+		Flow flow = new Flow();
+		flow.setAmount(amount);
+		flow.setCardNum(inCardNum);
+		flow.setDescript("转账收入");
+		flow.setFlowType(4);
+		
+		rows = flowMapper.addFlow(flow);
+		if (1 != rows) {
+			btm.successTrans(bcm,id);
+			throw new BizException("转账失败");
+		}
+		
+		int frpws = bcm.modifyTransferTask(1, id);
+		System.out.println("============"+frpws);
+	return rows;
+	}
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public int newTransferRollback(String amount, String outCardNum, Integer id) {
+		BankCard outCard = bcm.getBankCard(outCardNum);
+		if (null == outCard) {
+			btm.faliTrans(bcm,id);
+			throw new BizException("回滚银行卡不存在");
+		}
+		
+		String inBalance =  MoneyUtil.plus(outCard.getBalance(), amount);
+		
+		outCard.setBalance(inBalance);
+		int rows = bcm.modifyBalance(outCard.getCardNum(), outCard.getBalance(), outCard.getVersion());
+		if (1 != rows) {
+			btm.faliTrans(bcm,id);
+			throw new BizException("回滚失败");
+		}
+		
+		Flow flow = new Flow();
+		flow.setAmount(amount);
+		flow.setCardNum(outCardNum);
+		flow.setDescript("转账失败，金额回退");
+		flow.setFlowType(5);
+		
+		rows = flowMapper.addFlow(flow);
+		if (1 != rows) {
+			btm.faliTrans(bcm,id);
+			throw new BizException("回退失败");
+		}
+		
+		bcm.modifyTransferTask(3, id);
+	return rows;
 	}
 }

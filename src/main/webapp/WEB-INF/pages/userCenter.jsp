@@ -2,11 +2,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <!-- 頭部内容-->
+
+
+
 <jsp:include page="/WEB-INF/pages/common/header.jsp"/>
 
 <!-- 风格切换 -->
 
 <!-- 侧边导航栏 -->
+
+
 <jsp:include page="/WEB-INF/pages/common/left.jsp"/>
 
 <!-- 内容区域 -->
@@ -63,7 +68,13 @@
 </div>
 </div>
 </div>
+<!-- 尾部 -->
+
+
+
 <jsp:include page="common/footer.jsp"></jsp:include>
+
+
 <script type="text/javascript">
 		$(document).ready(function() {
 			//document.getElementById("HeadUsername").innerHTML='${user.username}';

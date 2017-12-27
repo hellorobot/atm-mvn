@@ -8,7 +8,6 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -16,7 +15,7 @@ public class FilterDemo1 implements Filter{
 
 	@Override
 	public void destroy() {
-		System.out.println("----Char filter destroy()【】【】【】】--");
+		//System.out.println("----Char filter destroy()【】【】【】】--");
 		
 	}
 
@@ -26,18 +25,18 @@ public class FilterDemo1 implements Filter{
 		HttpServletRequest req = (HttpServletRequest)arg0;
 		HttpServletResponse resp = (HttpServletResponse)arg1;
 		req.setCharacterEncoding("UTF-8");
-		System.out.println("=========》传入过滤=========》");
+		//System.out.println("=========》传入过滤=========》");
 		////////////////////////////////////////////////////////
 		arg2.doFilter(req, resp);
 		///////////////////////////////////////////////////////////
 		resp.setCharacterEncoding("UTF-8");
-		System.out.println("========《传出过滤========《");		
+		//System.out.println("========《传出过滤========《");		
 	}
 
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
 		// TODO Auto-generated method stub
-		System.out.println("Charfilter初始化【】】【】【】【】");
+		//System.out.println("Charfilter初始化【】】【】【】【】");
 		
 	}
 

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+  <!-- Quartz bean 计时器，job，jobdetail -->  
+  
+ <!-- jobDetail 决定job的一些细节 ，与下面算是一体的 -->     
+ <!-- 
+<bean id="jobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject" ref="exampleBusinessObject"/>
+    <property name="targetMethod" value="doit"/>
+</bean>
+ -->
+<bean id="jobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject" ref="transferBusiness"/>
+     <property name="targetMethod" value="checkAndRollback"/>
+     <property name="concurrent" value="false"/>
+</bean>
+
+	<bean id="jobDetail2" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+	    <property name="targetObject" ref="transferBusiness"/>
+	    <property name="targetMethod" value="checkAndTrans"/>
+	    <property name="concurrent" value="false"/>
+	</bean>
+ <!-- job實現類 -->  
+<bean id="exampleBusinessObject" class="top.robotman.atm.task.ExampleBs"/>
+<bean id="transferBusiness" class="top.robotman.atm.task.TransferBusiness">
+<property name="timeout" value="1"></property>  
+</bean>
+
+ <!-- Trigger 触发條件 -->  
+<bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">    
+    <property name="jobDetail" ref="jobDetail"/>
+    <property name="cronExpression" value="0/20 * * * * ?"/>
+</bean>
+
+<bean id="cronTrigger2" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">    
+    <property name="jobDetail" ref="jobDetail2"/>
+    <property name="cronExpression" value="0/20 * * * * ?"/>
+</bean>
+
+
+
+<!--SchedulerFactoryBean 调度员，决定使用哪些trigger -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+    <property name="triggers">
+        <list>
+         <ref bean="cronTrigger"/>
+            <ref bean="cronTrigger2"/>
+        </list>
+    </property>
+</bean>
+</beans>        
