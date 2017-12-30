@@ -24,10 +24,18 @@ public class TransferBusiness {
 	public void checkAndTrans() {
 
 		LocalDateTime tmptime = LocalDateTime.now();
+		System.out.println("timeout=========================="+tmptime.minusMinutes(timeout));
 		List<TransferTask> list = atmservice.listTransferTask(tmptime.minusMinutes(timeout), 0);
-		if (list != null) {
+		if (list.size() != 0) {
+			//System.out.println("list not null ============================="+list.size());
 			for (TransferTask task : list) {
-				atmservice.newTransferIN(task.getAmount(), task.getInCardnum(), task.getId());
+				try {
+					//System.out.println("task.getInCardnum()========="+task.getInCardnum());
+					atmservice.newTransferIN(task.getAmount(), task.getInCardnum(), task.getId());
+					
+				}catch(Exception e) {
+					e.printStackTrace();
+				}		
 			}
 		}
 	}

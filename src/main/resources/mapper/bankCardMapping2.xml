@@ -69,6 +69,21 @@
 	  and status=#{status};
   </select>
   
+   <select id="qureyTransferTaskByPage" resultType="TransferTask">
+	  select id,status,amount,out_cardnum as outCardnum,in_cardnum as inCardnum,createtime,modifytime 
+	  from transfer_quartz 
+	  WHERE createtime &lt;= #{tmptime}
+	  and status=#{status}
+	  limit #{startPoint},#{MoveLength};
+  </select>
+  
+    <select id="qureyTransferNum" resultType="Integer">
+	  select count(id)
+	  from transfer_quartz 
+	  WHERE createtime &lt;= #{tmptime}
+	  and status=#{status};
+  </select>
+  
     <update id="modifyTransferTask" >
    	UPDATE transfer_quartz  set
 	  status=#{status},modifytime = now()

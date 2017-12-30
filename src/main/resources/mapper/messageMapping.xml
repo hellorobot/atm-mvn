@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ 
+<mapper namespace="com.dayuanit.atm.mapper.MessageMapper">
+
+	<resultMap type="MessageForWebsocket" id="messageMap">
+		<id property="id" column="id"/>
+		<result property="userName" column="user_name"/>
+		<result property="msg" column="msg"/>
+		<result property="status" column="status"/>
+		<result property="createtime" column="createtime"/>
+	</resultMap>
+	
+	<sql id="message_filed">
+		 id,user_name, msg, status,createtime
+	</sql>
+	
+	<insert id="addMessage" useGeneratedKeys="true" keyProperty="id"  parameterType="com.dayuanit.atm.domain.MessageForWebsocket">
+		insert into atm_message(user_name, msg,status,createtime) 
+		values(#{userName},#{msg},#{status},now());
+	</insert>
+	
+	<select id="countUnReadNum" resultType="int">
+		select count(id)
+		from atm_message
+		where user_name=#{userName}
+		and status=0
+	</select>
+	
+	<select id="listUnReadMessageLimit3" resultMap="messageMap">
+		select <include refid="message_filed"></include>
+		from atm_message
+		where user_name=#{userName}
+		and status=0
+		order by createtime desc 
+		limit 3;
+	</select>
+  
+</mapper>

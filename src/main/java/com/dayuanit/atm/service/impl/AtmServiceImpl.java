@@ -14,10 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.dayuanit.atm.domain.BankCard;
 import com.dayuanit.atm.domain.Flow;
+import com.dayuanit.atm.domain.MessageForWebsocket;
 import com.dayuanit.atm.domain.TransferTask;
 import com.dayuanit.atm.exception.BizException;
 import com.dayuanit.atm.mapper.BankCardMapper2;
 import com.dayuanit.atm.mapper.FLowMapper;
+import com.dayuanit.atm.mapper.MessageMapper;
 import com.dayuanit.atm.service.AtmService;
 import com.dayuanit.atm.service.BtmSerivice;
 import com.dayuanit.atm.utils.CardUtils;
@@ -33,7 +35,10 @@ public class AtmServiceImpl implements AtmService {
 	@Autowired
 	private FLowMapper flowMapper;
 	@Autowired
+	private MessageMapper messageMapper;
+	@Autowired
 	private BtmSerivice btm;
+
 	
 
 	@Override
@@ -336,13 +341,16 @@ public class AtmServiceImpl implements AtmService {
 
 	@Override
 	public List<TransferTask> listTransferTask(LocalDateTime time,Integer status) {
-
-		List<TransferTask> list = bcm.qureyTransferTask(time, status);
 		
-		int i=0;
-		for (TransferTask tt : list) {
-			i++;
-			System.out.println(i+"======================" + tt.getId());
+		List<TransferTask> list = new ArrayList<TransferTask>();
+		//分页查询，防止数据了过大
+		//@TODO先查询总条数，然后分页查询，查完汇总进list，传出。
+		int num = bcm.qureyTransferNum(time.toString(), status);
+		System.out.println("======================num zongshu=====[][][]"+num);
+		for(int currentpage = 1;currentpage<=(num/5+1);currentpage++) {
+			
+			list.addAll(bcm.qureyTransferTaskByPage(time.toString(), status, (currentpage-1)*5, 5));
+			//List<TransferTask> list=bcm.qureyTransferTaskByPage(time, status, (currentpage-1)*5, 5);
 		}
 		return list;
 	}
@@ -352,7 +360,7 @@ public class AtmServiceImpl implements AtmService {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public int newTransferIN(String amount, String inCardNum,Integer id) {
-		
+		System.out.println("======================inCardNum"+inCardNum);
 		BankCard inCard = bcm.getBankCard(inCardNum);
 		if (null == inCard) {
 			btm.successTrans(bcm,id);
@@ -381,7 +389,18 @@ public class AtmServiceImpl implements AtmService {
 		}
 		
 		int frpws = bcm.modifyTransferTask(1, id);
-		System.out.println("============"+frpws);
+		
+		// 插入一条记录于message表，提示用户
+		try{
+			MessageForWebsocket message = new MessageForWebsocket();
+			message.setMsg("发财啦！收到一笔巨款，金额： " + amount +" ￥");
+			message.setUserName(inCard.getOwnerName());
+			message.setStatus(0);
+			messageMapper.addMessage(message);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
 	return rows;
 	}
 

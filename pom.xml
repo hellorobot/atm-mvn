@@ -23,6 +23,23 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.springframework.integration/spring-integration-test -->
+		<dependency>
+			<groupId>org.springframework.integration</groupId>
+			<artifactId>spring-integration-test</artifactId>
+			<version>4.3.10.RELEASE</version>
+			<scope>test</scope>
+		</dependency>
+
+
+
+
+
+		<!-- <dependency> <groupId>org.eclipse.jetty.websocket</groupId> <artifactId>websocket-server</artifactId> 
+			<version>9.4.8.v20171121</version> <scope>test</scope> </dependency> <dependency> 
+			<groupId>javax.websocket</groupId> <artifactId>javax.websocket-api</artifactId> 
+			<version>1.1</version> <scope>test</scope> </dependency> -->
+
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
@@ -161,6 +178,19 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-websocket</artifactId>
+			<version>4.3.10.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-messaging</artifactId>
+			<version>4.3.10.RELEASE</version>
+		</dependency>
+		<!-- websocket 依赖环境 -->
+
+		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
 			<version>2.9.3</version>
@@ -196,8 +226,10 @@
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>1.2.3</version>
-			<!-- <scope>test</scope> -->
 		</dependency>
+
+		<!-- <scope>test</scope> -->
+
 		<!-- <dependency> <groupId>ch.qos.logback</groupId> <artifactId>logback-core</artifactId> 
 			<version>1.2.3</version> </dependency> -->
 		<dependency>
@@ -212,13 +244,13 @@
 			<artifactId>log4j-over-slf4j</artifactId>
 			<version>1.7.25</version>
 		</dependency>
-<!-- 定时器 -->
+		<!-- 定时器 -->
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
 			<version>2.3.0</version>
 		</dependency>
-		
+
 	</dependencies>
 	<build>
 		<finalName>atm-mvn</finalName>

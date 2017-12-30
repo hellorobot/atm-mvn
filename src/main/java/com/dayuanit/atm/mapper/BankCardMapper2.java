@@ -24,7 +24,9 @@ public interface BankCardMapper2 {
 	int addTransferTask(@Param("status")Integer status,@Param("amount")String amount,@Param("outCardnum")String outCardnum,@Param("inCardnum")String inCardnum);
 	
 	List<TransferTask> qureyTransferTask(@Param("tmptime")LocalDateTime tmptime,@Param("status")Integer status);
-	
+	List<TransferTask> qureyTransferTaskByPage(@Param("tmptime")String tmptime,@Param("status")Integer status,@Param("startPoint")Integer startPoint,@Param("MoveLength")Integer MoveLength);
 	int modifyTransferTask(@Param("status")Integer status,@Param("id")Integer id);
+	
+	int qureyTransferNum(@Param("tmptime")String tmptime,@Param("status")Integer status);
 
 }
