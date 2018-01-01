@@ -15,7 +15,7 @@ import com.dayuanit.atm.service.AtmService;
 public class ConcurrentTest {
 	
 	
-	private static final int THREAD_NUM = 10000;
+	private static final int THREAD_NUM = 0;
 	static AtmService ser;
 	static AtomicInteger success=new AtomicInteger();
 	static AtomicInteger fail=new AtomicInteger();

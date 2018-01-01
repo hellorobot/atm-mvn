@@ -98,12 +98,15 @@
 <jsp:include page="common/footer.jsp"></jsp:include>
 
 <script type="text/javascript">
-	var apptransfer = new Vue({
-		el : '#transfer',
-		data : {
-			cardlist : []
-		}
-	})
+
+var apptransfer = new Vue({
+	el : '#transfer',
+	data : {
+		cardlist : []
+	}
+});
+
+
 
 	$(document).ready(function() {
 		//$('ul#leftchoice li a').removeClass();
@@ -111,7 +114,9 @@
 		$('#turn-transfer').addClass('active');
 		$('#HeadUsername').html('${user.username}');
 		//初始化页面参数
+
 		loadBankcard();
+		
 	});
 
 	function loadBankcard() {

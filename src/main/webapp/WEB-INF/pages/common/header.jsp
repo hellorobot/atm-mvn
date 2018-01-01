@@ -21,7 +21,7 @@
 
 <body data-type="index">
 
-	<div class="am-g tpl-g">
+	<div class="am-g tpl-g" id="head">
 
 		<!-- 头部 -->
 		<header>
@@ -49,38 +49,19 @@
 						<li class="am-dropdown" data-am-dropdown><a
 							href="javascript:;" class="am-dropdown-toggle"
 							data-am-dropdown-toggle> <i class="am-icon-bell"></i> <span
-								class="am-badge am-badge-warning am-round item-feed-badge">99+</span>
+								class="am-badge am-badge-warning am-round item-feed-badge">{{count}}</span>
 						</a> <!-- 弹出列表 -->
-							<ul class="am-dropdown-content tpl-dropdown-content">
-								<li class="tpl-dropdown-menu-notifications"><a
+							<ul class="am-dropdown-content tpl-dropdown-content" >
+								<li class="tpl-dropdown-menu-notifications" v-for="message in messages"><a
 									href="javascript:;"
 									class="tpl-dropdown-menu-notifications-item am-cf">
 										<div class="tpl-dropdown-menu-notifications-title">
-											<i class="am-icon-line-chart"></i> <span> 有6笔新的销售订单</span>
+											<i class="am-icon-line-chart"></i> <span> {{message.msg}}</span>
 										</div>
-										<div class="tpl-dropdown-menu-notifications-time">12分钟前
-										</div>
-								</a></li>
-								<li class="tpl-dropdown-menu-notifications"><a
-									href="javascript:;"
-									class="tpl-dropdown-menu-notifications-item am-cf">
-										<div class="tpl-dropdown-menu-notifications-title">
-											<i class="am-icon-star"></i> <span> 有3个来自人事部的消息</span>
-										</div>
-										<div class="tpl-dropdown-menu-notifications-time">30分钟前
+										<div class="tpl-dropdown-menu-notifications-time">{{message.createtime}}
 										</div>
 								</a></li>
-								<li class="tpl-dropdown-menu-notifications"><a
-									href="javascript:;"
-									class="tpl-dropdown-menu-notifications-item am-cf">
-										<div class="tpl-dropdown-menu-notifications-title">
-											<i class="am-icon-folder-o"></i> <span> 上午开会记录存档</span>
-										</div>
-										<div class="tpl-dropdown-menu-notifications-time">1天前</div>
-								</a></li>
-
-
-								<li class="tpl-dropdown-menu-notifications"><a
+							<li class="tpl-dropdown-menu-notifications"><a
 									href="javascript:;"
 									class="tpl-dropdown-menu-notifications-item am-cf"> <i
 										class="am-icon-bell"></i> 进入列表…
@@ -97,48 +78,5 @@
 			</div>
 
 		</header>
-
-		<script>
-		var ws = new WebSocket("ws://127.0.0.1:8080/WebSocketHandler.socket");
+</div>
 		
-		var timer = setInterval(function() {
-			if(ws.readyState == 1){
-				ws.send('waiting!....');
-				//ws=new WebSocket("ws://127.0.0.1:8080/WebSocketHandler.socket");
-			}
-			if(ws.readyState == 3){
-				ws = new WebSocket("ws://127.0.0.1:8080/WebSocketHandler.socket");
-			}
-		    console.log('轮询中。。。');
-		  }, 1000*30);
-		//clearInterval(timer);
-		
-		var endInterval = setTimeout(function(){
-			console.log('结束轮询。。。');
-			clearInterval(timer);
-		},1000*60*60);
-			
-		
-
-		
-		ws.onopen = function () {
-			 console.log("Connection open ..."); 
-			  ws.send('Hello Server!');
-			}
-		
-		ws.onmessage = function(evt) {
-			  console.log( "Received Message: " + evt.data);		  
-			};
-			
-		ws.onclose = function(event) {
-			  var code = event.code;
-			  var reason = event.reason;
-			  var wasClean = event.wasClean;
-			  // handle close event
-			};
-			
-			ws.onerror = function(event) {
-			 console.log( "error " + event.data);	
-				};
-		
-		</script>

@@ -10,6 +10,8 @@ import com.dayuanit.atm.domain.TransferTask;
 import com.dayuanit.atm.service.AtmService;
 import com.dayuanit.atm.service.impl.AtmServiceImpl;
 
+import top.robotman.atm.webSocket.WebSocketHandler;
+
 @Component
 public class TransferBusiness {
 	@Autowired
@@ -32,7 +34,7 @@ public class TransferBusiness {
 				try {
 					//System.out.println("task.getInCardnum()========="+task.getInCardnum());
 					atmservice.newTransferIN(task.getAmount(), task.getInCardnum(), task.getId());
-					
+					//websocket.sendMessage(userName);
 				}catch(Exception e) {
 					e.printStackTrace();
 				}		

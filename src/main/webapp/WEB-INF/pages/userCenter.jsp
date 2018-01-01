@@ -76,12 +76,15 @@
 
 
 <script type="text/javascript">
+
+
 		$(document).ready(function() {
 			//document.getElementById("HeadUsername").innerHTML='${user.username}';
 			$('#HeadUsername').html('${user.username}');
 
 			loadBankcard();
 			loadFlowTable();
+			//loadMessage();
 		});
 		
 		function upload2(){
@@ -121,6 +124,8 @@
 			$.post('/user/loadBankcard.do', {}, callback);
 
 		}
+		
+
 
 		function loadFlowTable() {
 			$.post('/bankCard/loadNearFlow.do', {}, callback2);
@@ -173,6 +178,8 @@
 		function loadAvatar() {
     		$('#touxiangIMG').attr('src','/resources/image/${user.id }?'+Date());
     	}
+		
+		
 		
 	</script>
 	

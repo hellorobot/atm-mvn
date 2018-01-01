@@ -27,6 +27,7 @@ import com.dayuanit.atm.utils.MoneyUtil;
 
 import top.robotman.atm.ajaxDTO.FlowDto;
 import top.robotman.atm.flipPages.FlipPage;
+import top.robotman.atm.webSocket.WebSocketHandler;
 @Service
 public class AtmServiceImpl implements AtmService {
 
@@ -38,6 +39,9 @@ public class AtmServiceImpl implements AtmService {
 	private MessageMapper messageMapper;
 	@Autowired
 	private BtmSerivice btm;
+	@Autowired
+	private WebSocketHandler websocket;
+
 
 	
 
@@ -393,7 +397,7 @@ public class AtmServiceImpl implements AtmService {
 		// 插入一条记录于message表，提示用户
 		try{
 			MessageForWebsocket message = new MessageForWebsocket();
-			message.setMsg("发财啦！收到一笔巨款，金额： " + amount +" ￥");
+			message.setMsg("发财啦！收到一笔巨款：" + amount +" ￥");
 			message.setUserName(inCard.getOwnerName());
 			message.setStatus(0);
 			messageMapper.addMessage(message);
@@ -401,6 +405,7 @@ public class AtmServiceImpl implements AtmService {
 			e.printStackTrace();
 		}
 		
+		websocket.sendMessage(inCard.getOwnerName());		
 	return rows;
 	}
 

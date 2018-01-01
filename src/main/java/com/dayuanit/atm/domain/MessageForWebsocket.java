@@ -1,12 +1,13 @@
 package com.dayuanit.atm.domain;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public class MessageForWebsocket {
 	private Integer id;
 	private String userName;
 	private String msg;
-	private LocalDateTime createTime;
+	private Date createtime;
 	private Integer status;
 	public Integer getId() {
 		return id;
@@ -27,11 +28,13 @@ public class MessageForWebsocket {
 	public void setMsg(String msg) {
 		this.msg = msg;
 	}
-	public LocalDateTime getCreateTime() {
-		return createTime;
+	
+
+	public Date getCreatetime() {
+		return createtime;
 	}
-	public void setCreateTime(LocalDateTime createTime) {
-		this.createTime = createTime;
+	public void setCreatetime(Date createtime) {
+		this.createtime = createtime;
 	}
 	public Integer getStatus() {
 		return status;

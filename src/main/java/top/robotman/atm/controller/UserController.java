@@ -15,10 +15,12 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.util.WebUtils;
 
 import com.dayuanit.atm.domain.BankCard;
@@ -26,13 +28,17 @@ import com.dayuanit.atm.domain.User;
 import com.dayuanit.atm.exception.BizException;
 import com.dayuanit.atm.service.UserService;
 import top.robotman.atm.ajaxDTO.AjaxDTO;
+import top.robotman.atm.ajaxDTO.WebSocketDTO;
+import top.robotman.atm.webSocket.WebSocketHandler;
 
 @Controller
 @RequestMapping("/user")
 public class UserController extends BaseController {
 
-	@org.springframework.beans.factory.annotation.Autowired
+	@Autowired
 	private UserService userService;
+	 @Autowired
+	 private WebSocketHandler websocket;
 
 	@RequestMapping("/toLogin")
 	public String toLogin(HttpServletRequest req, HttpServletResponse resp) {
@@ -195,6 +201,15 @@ public class UserController extends BaseController {
 			return dto;
 		}
 	}
+	
+	@RequestMapping("/loadMessage")
+	@ResponseBody
+	public AjaxDTO loadMessage(HttpSession session)  {
+		User user = (User)session.getAttribute("user");
+		WebSocketDTO webDto = websocket.sendMessage2(user.getUsername());
+		return AjaxDTO.success(webDto);
+	}
+
 
 	@RequestMapping("/tochangePSW")
 	public String tochangePSW(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

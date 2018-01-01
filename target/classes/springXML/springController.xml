@@ -67,9 +67,9 @@
 		<!--<property name="nestedTransactionAllowed" value="true"/>-->
 	</bean>
 <!-- 导入task文件 -->
-<!-- 
+<!--  -->
 	<import resource="classpath:springXML/spring-task.xml" />
- -->
+
 	<import resource="classpath:springXML/spring-websocket.xml" />
 
 </beans>

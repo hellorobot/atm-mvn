@@ -32,18 +32,18 @@
  <!-- job實現類 -->  
 <bean id="exampleBusinessObject" class="top.robotman.atm.task.ExampleBs"/>
 <bean id="transferBusiness" class="top.robotman.atm.task.TransferBusiness">
-<property name="timeout" value="2"></property>  
+<property name="timeout" value="1"></property>  
 </bean>
 
  <!-- Trigger 触发條件 -->  
 <bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">    
     <property name="jobDetail" ref="jobDetail"/>
-    <property name="cronExpression" value="0/5 * * * * ?"/>
+    <property name="cronExpression" value="0/30 * * * * ?"/>
 </bean>
 
 <bean id="cronTrigger2" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">    
     <property name="jobDetail" ref="jobDetail2"/>
-    <property name="cronExpression" value="0/20 * * * * ?"/>
+    <property name="cronExpression" value="0/30 * * * * ?"/>
 </bean>
 
 
