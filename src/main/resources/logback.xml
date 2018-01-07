@@ -45,18 +45,18 @@
 	</appender>
 
 	<!-- log节点 -->
-	<logger name="com.dayuanit.atm" level="debug" additivity="false">
+	<logger name="com.dayuanit.atm" level="info" additivity="false">
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="ASYNC" />
 	</logger>
 
-	<logger name="top.robotman.atm" level="debug" additivity="false">
+	<logger name="top.robotman.atm" level="info" additivity="false">
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="ASYNC" />
 	</logger>
 
 	<!-- root节点 -->
-	<root level="debug">
+	<root level="info">
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="ASYNC" />
 	</root>

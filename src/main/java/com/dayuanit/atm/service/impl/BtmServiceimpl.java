@@ -9,6 +9,7 @@ import com.dayuanit.atm.service.BtmSerivice;
 @Service
 public class BtmServiceimpl implements BtmSerivice{
 	
+	@Override
 	@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public void successTrans(BankCardMapper2 bcm,Integer id) {
 		//System.out.println("===========sxxxxxx==========");
@@ -16,6 +17,7 @@ public class BtmServiceimpl implements BtmSerivice{
 		//System.out.println("===========!!!!!!!==========");
 	}
 	
+	@Override
 	@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public void faliTrans(BankCardMapper2 bcm,Integer id) {
 		bcm.modifyTransferTask(4, id);

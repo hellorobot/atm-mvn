@@ -15,12 +15,15 @@ import com.dayuanit.atm.service.UserService;
 
 
 import top.robotman.atm.flipPages.FlipPage;
+import top.robotman.atm.redisHandler.RedisHandler;
 @Service
 public class UserServiceimpl implements UserService {
 	@Autowired
 	private UserMapper usermp;
 	@Autowired
 	private BankCardMapper2 bankCardMapper2;
+	@Autowired
+	private RedisHandler redisHandler;
 
 	@Override
 	public User getUser(String username) {
@@ -61,20 +64,30 @@ public class UserServiceimpl implements UserService {
 
 	@Override
 	public List<BankCard> getCardsPage(String username, Integer currentPage) {
-
-		FlipPage flipPage = new FlipPage();
-
-//		List<BankCard> bankCardList = bankCardMapper2.getBankCardList(username, flipPage.getStartNum(currentPage),
-//				FlipPage.EVERY_PAGE_FLOW_NUM);
-		List<BankCard> bankCardList = bankCardMapper2.getBankCardList(username, null, null);
-//		flipPage.setCurrentPage(currentPage);
-//		flipPage.setObj(bankCardList);
-
-		int cardsNum = bankCardMapper2.getBankCardListNum(username);
-//		flipPage.setFlowsNum(cardsNum);
-//		flipPage.setPagesNumxxx(cardsNum);
-//		return flipPage;
-		return bankCardList;
+		List<BankCard> bankCardListByRedis = null;
+		//先查redis吧
+		try {
+			bankCardListByRedis =  redisHandler.getBankcards(username, currentPage);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+				
+		//如果为空，就查出来，并且写入缓存（如果可以简易开一个线程来写缓存，不然太麻烦）
+		if(null == bankCardListByRedis) {
+			
+			FlipPage flipPage = new FlipPage();
+			List<BankCard> bankCardList = bankCardMapper2.getBankCardList(username, null, null);
+			int cardsNum = bankCardMapper2.getBankCardListNum(username);
+			//将获得的东西存入redis
+			try {
+				redisHandler.writeBankcard(username, currentPage, bankCardList);
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+			}		
+			return bankCardList;		
+		}
+		return bankCardListByRedis;	
 	}
 
 	@Override

@@ -8,9 +8,6 @@ import org.springframework.stereotype.Component;
 
 import com.dayuanit.atm.domain.TransferTask;
 import com.dayuanit.atm.service.AtmService;
-import com.dayuanit.atm.service.impl.AtmServiceImpl;
-
-import top.robotman.atm.webSocket.WebSocketHandler;
 
 @Component
 public class TransferBusiness {

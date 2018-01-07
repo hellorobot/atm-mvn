@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc" 
+    xmlns:cache="http://www.springframework.org/schema/cache"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:c="http://www.springframework.org/schema/c"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans.xsd 
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc.xsd
+    http://www.springframework.org/schema/cache
+    http://www.springframework.org/schema/cache/spring-cache.xsd
+    http://www.springframework.org/schema/aop 
+    http://www.springframework.org/schema/aop/spring-aop.xsd"    
+    default-autowire="byName">
+
+<!-- 加载配置文件  
+
+   <bean id="configure" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:/redis.properties</value>
+            </list>
+        </property>
+    </bean>
+   -->
+<!-- 配置连接池     -->
+    <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxIdle" value="${redis.maxIdle}"></property>
+        <property name="maxWaitMillis" value="${redis.maxWait}"></property>
+        <property name="maxTotal" value="${redis.maxActive}"></property>
+        <property name="minIdle" value="${redis.minIdle}"></property>
+    </bean>
+
+<!-- 一个jedisfactory的内部类，用来进行相关配置  -->  
+   <bean id="JedisClientConfiguration"
+          class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory.MutableJedisClientConfiguration">
+        <property name="poolConfig" ref="poolConfig"></property>
+    </bean>
+
+<!--工厂类，可以简易设置，但是2.0后不支持property-->
+  <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" 
+  	p:use-pool="true"
+    p:hostName="${redis.host}"
+    p:password="${redis.password}"
+    p:port="${redis.port}"
+    p:poolConfig-ref="poolConfig">
+    <!--  
+     <constructor-arg type="org.springframework.data.redis.connection.jedis.JedisClientConfiguration" ref="JedisClientConfiguration">
+     </constructor-arg>-->
+  </bean>
+      
+  <bean id="stringSerial" class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+
+  <!-- redis template definition -->
+  <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate" 
+  p:connection-factory-ref="jedisConnectionFactory"
+  p:keySerializer-ref="stringSerial"
+  />
+  
+  <!-- turn on declarative caching --> 
+  
+  <cache:annotation-driven cache-manager="redisCacheManager"/>
+</beans>
+  	

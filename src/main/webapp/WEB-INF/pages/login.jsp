@@ -53,7 +53,23 @@
 						<input type="password" class="tpl-form-input" id="password"
 							placeholder="请输入密码">
 
+		
+
+
+
 					</div>
+					<div   class="am-u-sm-6 am-padding-left-0 am-form-group" >
+						 <img id="codeImg" alt=""
+							src="/checkcode/getCheckcode.do"  height="30" width="135">
+							<!-- onclick="loadCaptcha();" -->
+					</div>
+					
+					<div  class="am-u-sm-6 am-padding-left-0 am-form-group" >
+						<input type="text" class="tpl-form-input" id="checkcode"
+							placeholder="请输入验证码"> 
+							<!-- onclick="loadCaptcha();" -->
+					</div>
+					
 
 
 
@@ -90,14 +106,13 @@
 			</div>
 		</div>
 	</div>
-	
-<jsp:include page="common/footer.jsp"></jsp:include>
+
+	<jsp:include page="common/footer.jsp"></jsp:include>
 
 
 	<script type="text/javascript">
-	
 		var Loginflag = '${user}';
-		
+
 		var app1 = new Vue({
 			el : '#login-1',
 			data : {
@@ -111,14 +126,14 @@
 				message : 'Hello Vue!'
 			}
 		})
-		
-		$(document).ready(function(){
-			if( Loginflag != ''){
+
+		$(document).ready(function() {
+			if (Loginflag != '') {
 				//alert(' ${user.username} ');
 				//alert('sx');
 				app1.message = '登陆成功';
 				app2.message = '欢迎您，' + ' ${user.username} ';
-				
+
 				//RB.alert();
 
 				$('#login-alert').modal('open');
@@ -130,27 +145,26 @@
 
 		function ajaxFunction(data, status) {
 			var ajaxDto = data;
-		
 
 			if (ajaxDto.flag) {
 				//location.replace(location.href);
 				//刷新页面以读取session，
-				window.location.href='/user/toLogin.do';
+				window.location.href = '/user/toLogin.do';
 				//alert(' ${user.username} ');
-// 				app1.message = '登陆成功';
-// 				app2.message = '欢迎您，' + ' ${user.username} ';
+				// 				app1.message = '登陆成功';
+				// 				app2.message = '欢迎您，' + ' ${user.username} ';
 
-// 				$('#login-alert').modal('open');
-// 				$('#login-alert').on('close.modal.amui', function() {
-// 					window.location.href = '/user/toUserCenter.do';
-// 				});
+				// 				$('#login-alert').modal('open');
+				// 				$('#login-alert').on('close.modal.amui', function() {
+				// 					window.location.href = '/user/toUserCenter.do';
+				// 				});
 			} else {
 				//alert(ajaxDto.message);
-				RB.alert(false,'登录失败,'+ajaxDto.message);
-				
-// 				app1.message = '登陆失败';
-// 				app2.message = 'sx ~' + ajaxDto.message;
-// 				$('#login-alert').modal('open');
+				RB.alert(false, '登录失败,' + ajaxDto.message);
+
+				// 				app1.message = '登陆失败';
+				// 				app2.message = 'sx ~' + ajaxDto.message;
+				// 				$('#login-alert').modal('open');
 			}
 		}
 
@@ -166,7 +180,6 @@
 		function toRegist() {
 			window.location.href = "/user/toRegist.do";
 		}
-		
 	</script>
 
 </body>

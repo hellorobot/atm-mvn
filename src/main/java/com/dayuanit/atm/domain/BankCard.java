@@ -1,8 +1,9 @@
 package com.dayuanit.atm.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class BankCard {
+public class BankCard implements Serializable{
 	
 	private Integer id;
 	private String cardNum;

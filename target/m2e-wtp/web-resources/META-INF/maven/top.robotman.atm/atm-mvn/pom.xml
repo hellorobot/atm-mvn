@@ -15,6 +15,26 @@
 			<version>1.1.2</version>
 		</dependency>
 
+		<dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>2.9.0</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        
+<!-- 	  
+	<dependency>
+	    <groupId>org.springframework.data</groupId>
+	    <artifactId>spring-data-redis</artifactId>
+	    <version>1.8.9.RELEASE</version>
+	</dependency>
+-->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+            <version>2.0.2.RELEASE</version>
+        </dependency>
 
 		<dependency>
 			<groupId>junit</groupId>
@@ -23,14 +43,15 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.springframework.integration/spring-integration-test -->
+		<!-- https://mvnrepository.com/artifact/org.springframework.integration/spring-integration-test 
+		
 		<dependency>
 			<groupId>org.springframework.integration</groupId>
 			<artifactId>spring-integration-test</artifactId>
-			<version>4.3.10.RELEASE</version>
+			<version>5.0.2.RELEASE</version>
 			<scope>test</scope>
 		</dependency>
-
+-->
 
 
 
@@ -93,25 +114,25 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
-			<version>4.3.10.RELEASE</version>
+			<version>5.0.2.RELEASE</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
-			<version>4.3.10.RELEASE</version>
+			<version>5.0.2.RELEASE</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>4.3.10.RELEASE</version>
+			<version>5.0.2.RELEASE</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>4.3.10.RELEASE</version>
+			<version>5.0.2.RELEASE</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>commons-logging</artifactId>
@@ -124,7 +145,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-expression</artifactId>
-			<version>4.3.10.RELEASE</version>
+			<version>5.0.2.RELEASE</version>
 		</dependency>
 
 		<dependency>
@@ -140,6 +161,11 @@
 			<version>2.1.1</version>
 			<exclusions>
 				<exclusion>
+					<artifactId>commons-pool2</artifactId>
+					<groupId>org.apache.commons</groupId>
+				</exclusion>
+				
+				<exclusion>
 					<artifactId>commons-logging</artifactId>
 					<groupId>commons-logging</groupId>
 				</exclusion>
@@ -150,43 +176,43 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
-			<version>4.3.10.RELEASE</version>
+			<version>5.0.2.RELEASE</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-tx</artifactId>
-			<version>4.3.10.RELEASE</version>
+			<version>5.0.2.RELEASE</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
-			<version>4.3.10.RELEASE</version>
+			<version>5.0.2.RELEASE</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>4.3.10.RELEASE</version>
+			<version>5.0.2.RELEASE</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>4.3.10.RELEASE</version>
+			<version>5.0.2.RELEASE</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-websocket</artifactId>
-			<version>4.3.10.RELEASE</version>
+			<version>5.0.2.RELEASE</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-messaging</artifactId>
-			<version>4.3.10.RELEASE</version>
+			<version>5.0.2.RELEASE</version>
 		</dependency>
 		<!-- websocket 依赖环境 -->
 
@@ -212,7 +238,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>4.3.10.RELEASE</version>
+			<version>5.0.2.RELEASE</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- log 框架 -->

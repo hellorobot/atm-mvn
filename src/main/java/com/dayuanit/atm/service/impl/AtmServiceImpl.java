@@ -7,9 +7,9 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.dayuanit.atm.domain.BankCard;
@@ -47,6 +47,7 @@ public class AtmServiceImpl implements AtmService {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
+	@CacheEvict(value="bankcard",key="#root.target.getName(#cardNum)")
 	public BankCard openAccount(String password, String ownerName) {
 		BankCard bankCard = new BankCard();
 		bankCard.setBalance("0.00");
@@ -78,12 +79,18 @@ public class AtmServiceImpl implements AtmService {
 		}
 		return bankCard;
 	}
-
+	
+	
+	//key的写法很恶心！！！
 	@Override
 	@Transactional(rollbackFor = Exception.class)
+	@CacheEvict(value="bankcard",key="#root.target.getName(#cardNum)")
 	public void deposit(String amount, String cardNum, String password) {
+		
 
 		BankCard bankCard = bcm.getBankCard(cardNum);
+		//getName(bankCard);
+		
 		if (StringUtils.isBlank(cardNum)) {
 			throw new BizException("卡号不能为空");
 		}
@@ -114,8 +121,15 @@ public class AtmServiceImpl implements AtmService {
 		}
 	}
 
+	//TODO ask wang！这种key的设置比较恶心
+	public String getName(String cardNum) {
+		BankCard bankCard = bcm.getBankCard(cardNum);
+		return bankCard.getOwnerName();
+	}
+
 	@Override
 	@Transactional(rollbackFor = Exception.class)
+	@CacheEvict(value="bankcard",key="#root.target.getName(#cardNum)")
 	public void draw(String amount, String cardNum, String password) {
 		if (StringUtils.isBlank(cardNum)) {
 			throw new BizException("卡号不能为空");
@@ -164,6 +178,7 @@ public class AtmServiceImpl implements AtmService {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
+	@CacheEvict(value="bankcard",key="#root.target.getName(#cardNum)")
 	public void transfer(String amount, String inCardNum, String outCardNum, String password) {
 		BankCard outCard = bcm.getBankCard(outCardNum);
 
@@ -284,14 +299,16 @@ public class AtmServiceImpl implements AtmService {
 	public BankCard getBankCard(String cardNum) {
 		return bcm.getBankCard(cardNum);
 	}
-
+//TODO 如何让标签的异常不影响主程序
 	@Override
+	@Cacheable(value="nearlist",key="#username")
 	public List<Flow> listFlowNearly(String username) {
 		return flowMapper.listFlowNearly(username);
 	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
+	@CacheEvict(value="bankcard",key="#root.target.getName(#cardNum)")
 	public int newTransfer(String amount, String inCardNum, String outCardNum, String password) {
 		BankCard outCard = bcm.getBankCard(outCardNum);
 		BankCard inCard = bcm.getBankCard(inCardNum);
@@ -348,7 +365,7 @@ public class AtmServiceImpl implements AtmService {
 		
 		List<TransferTask> list = new ArrayList<TransferTask>();
 		//分页查询，防止数据了过大
-		//@TODO先查询总条数，然后分页查询，查完汇总进list，传出。
+		//先查询总条数，然后分页查询，查完汇总进list，传出。
 		int num = bcm.qureyTransferNum(time.toString(), status);
 		System.out.println("======================num zongshu=====[][][]"+num);
 		for(int currentpage = 1;currentpage<=(num/5+1);currentpage++) {
@@ -363,6 +380,7 @@ public class AtmServiceImpl implements AtmService {
 	
 	@Override
 	@Transactional(rollbackFor = Exception.class)
+	@CacheEvict(value="bankcard",key="#root.target.getName(#cardNum)")
 	public int newTransferIN(String amount, String inCardNum,Integer id) {
 		System.out.println("======================inCardNum"+inCardNum);
 		BankCard inCard = bcm.getBankCard(inCardNum);
@@ -411,6 +429,7 @@ public class AtmServiceImpl implements AtmService {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
+	@CacheEvict(value="bankcard",key="#root.target.getName(#cardNum)")
 	public int newTransferRollback(String amount, String outCardNum, Integer id) {
 		BankCard outCard = bcm.getBankCard(outCardNum);
 		if (null == outCard) {

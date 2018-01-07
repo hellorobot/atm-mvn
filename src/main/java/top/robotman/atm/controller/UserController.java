@@ -16,11 +16,12 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.util.WebUtils;
 
 import com.dayuanit.atm.domain.BankCard;
@@ -29,6 +30,7 @@ import com.dayuanit.atm.exception.BizException;
 import com.dayuanit.atm.service.UserService;
 import top.robotman.atm.ajaxDTO.AjaxDTO;
 import top.robotman.atm.ajaxDTO.WebSocketDTO;
+import top.robotman.atm.config.Trycache;
 import top.robotman.atm.webSocket.WebSocketHandler;
 
 @Controller
@@ -39,6 +41,8 @@ public class UserController extends BaseController {
 	private UserService userService;
 	 @Autowired
 	 private WebSocketHandler websocket;
+//	 @Autowired
+//	 private Trycache trycache;
 
 	@RequestMapping("/toLogin")
 	public String toLogin(HttpServletRequest req, HttpServletResponse resp) {
@@ -187,7 +191,12 @@ public class UserController extends BaseController {
 
 		HttpSession httpSession = req.getSession(true);
 		User user = (User) httpSession.getAttribute("user");
-
+		//实验@chache
+//		try {
+//			trycache.trycache("sx");
+//		}catch(Exception e) {
+//			e.printStackTrace();
+//		}
 		List<BankCard> cardlist = userService.getCardsPage(user.getUsername(), 1);
 
 		AjaxDTO dto = new AjaxDTO();
@@ -249,4 +258,11 @@ public class UserController extends BaseController {
 		session123.invalidate();
 		return dto;
 	}
+	
+	@RequestMapping("/logout")
+	public String logout(HttpSession session) {
+		session.invalidate();
+		return "redirect:/login.do";
+	}
+	
 }
